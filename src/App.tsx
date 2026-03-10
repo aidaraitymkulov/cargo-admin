@@ -1,26 +1,19 @@
-import { useState } from 'react'
-import './App.css'
+import { Navigate, Route, Routes } from 'react-router-dom'
+import { AuthGuard, DashboardLayout } from '@/components'
+import { DashboardPage } from '@/pages/dashboard'
+import { LoginPage } from '@/pages/LoginPage'
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <Routes>
+      <Route path="/login" element={<LoginPage />} />
+      <Route element={<AuthGuard />}>
+        <Route element={<DashboardLayout />}>
+          <Route path="/" element={<DashboardPage />} />
+        </Route>
+      </Route>
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   )
 }
 
