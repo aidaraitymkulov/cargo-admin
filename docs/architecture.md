@@ -6,7 +6,7 @@
 |---|---|
 | Сборщик | Vite + React + TypeScript |
 | Роутинг | React Router v6 |
-| Серверный стейт | TanStack Query (React Query) |
+| Серверный стейт | RTK Query (@reduxjs/toolkit) |
 | HTTP-клиент | Axios |
 | Формы | React Hook Form + Zod |
 | UI-компоненты | shadcn/ui |
@@ -16,7 +16,7 @@
 | Загрузка файлов | react-dropzone |
 | WebSocket (чат) | @stomp/stompjs + sockjs-client |
 | Toast-уведомления | Sonner |
-| Глобальный стейт | Zustand |
+| Глобальный стейт | Redux Toolkit (authSlice) |
 | Дата-пикер | react-day-picker (входит в shadcn) |
 
 ---
@@ -25,16 +25,10 @@
 
 ```
 src/
-├── api/                        # Все запросы к бэкенду
-│   ├── client.ts               # Axios instance (credentials: include, interceptors)
-│   ├── managers.ts
-│   ├── branches.ts
-│   ├── users.ts
-│   ├── imports.ts
-│   ├── news.ts
-│   ├── notifications.ts
-│   ├── chat.ts
-│   └── reports.ts
+├── api/                        # HTTP-клиент и RTK Query API
+│   ├── baseQuery.ts            # Axios instance (credentials, interceptors) + axiosBaseQuery
+│   ├── authApi.ts              # createApi: login, logout
+│   └── index.ts                # Реэкспорт authApi и хуков
 │
 ├── components/
 │   ├── ui/                     # shadcn компоненты (генерируются CLI)
@@ -73,7 +67,9 @@ src/
 │   └── usePagination.ts        # Общая логика пагинации
 │
 ├── store/
-│   └── authStore.ts            # Zustand: текущий юзер + роль (минимум)
+│   ├── store.ts                # Redux configureStore
+│   ├── authSlice.ts            # Redux slice: user | null + setUser
+│   └── index.ts                # Реэкспорт всего из store
 │
 ├── lib/
 │   ├── utils.ts                # cn() = clsx + tailwind-merge
@@ -98,24 +94,25 @@ src/
 
 ### Axios instance
 
-```ts
-// api/client.ts
-import axios from 'axios'
+Axios instance создаётся внутри `api/baseQuery.ts` и не экспортируется — он используется только как транспорт для `axiosBaseQuery`.
 
-export const api = axios.create({
+```ts
+// api/baseQuery.ts (фрагмент)
+const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   withCredentials: true,
 })
 
-// При 401 — редирект на логин
+// При 401 (не на /auth/*) — редирект на логин
 api.interceptors.response.use(
   (res) => res,
   (error) => {
-    if (error.response?.status === 401) {
+    const isAuthRequest = error.config?.url?.startsWith('/auth/')
+    if (error.response?.status === 401 && !isAuthRequest) {
       window.location.href = '/login'
     }
     return Promise.reject(error)
-  }
+  },
 )
 ```
 
@@ -147,33 +144,61 @@ api.interceptors.response.use(
 
 ---
 
-## Серверный стейт — TanStack Query
+## Серверный стейт — RTK Query
 
-Вся работа с данными через React Query.
+Вся работа с данными через RTK Query. Для каждого домена — свой `createApi` в `api/`.
 
 ```ts
-// api/users.ts
-export const getUsers = (params: GetUsersParams) =>
-  api.get('/admin/users', { params }).then(res => res.data)
+// api/baseQuery.ts — общий Axios-транспорт
+export const axiosBaseQuery: BaseQueryFn<Args, unknown, QueryError> = async ({ url, method, data, params, headers }) => {
+  try {
+    const result = await api({ url, method, data, params, headers })
+    return { data: result.data }
+  } catch (err) {
+    if (isAxiosError(err)) {
+      return { error: { status: err.response?.status, data: err.response?.data } }
+    }
+    return { error: { data: 'Unknown error' } }
+  }
+}
 
-// pages/users/UsersPage.tsx
-const { data, isLoading } = useQuery({
-  queryKey: ['users', filters],
-  queryFn: () => getUsers(filters),
-  placeholderData: keepPreviousData, // не мигает при смене страницы
+// api/authApi.ts
+export const authApi = createApi({
+  reducerPath: 'authApi',
+  baseQuery: axiosBaseQuery,
+  endpoints: (builder) => ({
+    login: builder.mutation<User, LoginDto>({ ... }),
+    logout: builder.mutation<void, void>({ ... }),
+  }),
+})
+
+export const { useLoginMutation, useLogoutMutation } = authApi
+```
+
+Redux store собирается в `store/store.ts`:
+
+```ts
+export const store = configureStore({
+  reducer: {
+    [authApi.reducerPath]: authApi.reducer,
+    // + reducers для каждого нового домена
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(authApi.middleware /* + остальные */),
 })
 ```
 
-После мутации — инвалидируем кэш:
+После мутации — инвалидируем кэш через `providesTags` / `invalidatesTags`:
 
 ```ts
-const mutation = useMutation({
-  mutationFn: createManager,
-  onSuccess: () => {
-    queryClient.invalidateQueries({ queryKey: ['managers'] })
-    toast.success('Менеджер создан')
-  },
-})
+getManagers: builder.query<Manager[], void>({
+  query: () => ({ url: '/admin/managers' }),
+  providesTags: ['Manager'],
+}),
+createManager: builder.mutation<Manager, CreateManagerDto>({
+  query: (data) => ({ url: '/admin/managers', method: 'POST', data }),
+  invalidatesTags: ['Manager'],
+}),
 ```
 
 ---
@@ -275,24 +300,35 @@ export function cn(...inputs: ClassValue[]) {
 
 ---
 
-## Глобальный стейт — Zustand
+## Глобальный стейт — Redux Toolkit (authSlice)
 
-Минимальный. Только авторизация:
+Весь стейт — в Redux. Zustand не используется.
 
 ```ts
-// store/authStore.ts
-interface AuthStore {
-  user: User | null
-  setUser: (user: User | null) => void
-}
+// store/authSlice.ts
+export const authSlice = createSlice({
+  name: 'auth',
+  initialState: { user: null } as { user: User | null },
+  reducers: {
+    setUser: (state, action: PayloadAction<User | null>) => {
+      state.user = action.payload
+    },
+  },
+})
 
-export const useAuthStore = create<AuthStore>((set) => ({
-  user: null,
-  setUser: (user) => set({ user }),
-}))
+export const { setUser } = authSlice.actions
 ```
 
-Всё остальное — через TanStack Query. Redux не нужен.
+Использование:
+
+```ts
+// читать
+const user = useSelector((state: RootState) => state.auth.user)
+
+// писать
+const dispatch = useDispatch()
+dispatch(setUser(user))
+```
 
 ---
 
