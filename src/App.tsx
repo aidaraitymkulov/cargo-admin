@@ -1,12 +1,18 @@
-import { Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
+import { AuthGuard, DashboardLayout } from '@/components'
+import { DashboardPage } from '@/pages/dashboard'
 import { LoginPage } from '@/pages/LoginPage'
-import { DashboardLayout } from './components'
 
 function App() {
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
-      <Route element={<DashboardLayout />}></Route>
+      <Route element={<AuthGuard />}>
+        <Route element={<DashboardLayout />}>
+          <Route path="/" element={<DashboardPage />} />
+        </Route>
+      </Route>
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   )
 }

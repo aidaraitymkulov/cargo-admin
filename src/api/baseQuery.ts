@@ -9,11 +9,22 @@ const api = axios.create({
 
 api.interceptors.response.use(
   (res) => res,
-  (error) => {
-    const isAuthRequest = error.config?.url?.startsWith('/auth/')
-    if (error.response?.status === 401 && !isAuthRequest) {
-      window.location.href = '/login'
+  async (error) => {
+    const originalRequest = error.config
+    const isAuthRequest = originalRequest?.url?.startsWith('/auth/')
+
+    if (error.response?.status === 401 && !isAuthRequest && !originalRequest._retry) {
+      originalRequest._retry = true
+      try {
+        await api.post('/auth/refresh', null, {
+          headers: { 'X-Client-Type': 'web' },
+        })
+        return api(originalRequest)
+      } catch {
+        window.location.href = '/login'
+      }
     }
+
     return Promise.reject(error)
   },
 )

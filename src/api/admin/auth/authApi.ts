@@ -5,7 +5,10 @@ import { axiosBaseQuery } from '../../baseQuery'
 export const authApi = createApi({
   reducerPath: 'authApi',
   baseQuery: axiosBaseQuery,
-  endpoints: ({ mutation }) => ({
+  endpoints: ({ mutation, query }) => ({
+    getMe: query<User, void>({
+      query: () => ({ url: '/users/me' }),
+    }),
     login: mutation<User, LoginDto>({
       query: (data) => ({
         url: '/auth/login',
@@ -21,4 +24,4 @@ export const authApi = createApi({
   }),
 })
 
-export const { useLoginMutation, useLogoutMutation } = authApi
+export const { useGetMeQuery, useLoginMutation, useLogoutMutation } = authApi
