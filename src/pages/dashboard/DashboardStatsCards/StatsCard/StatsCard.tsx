@@ -1,27 +1,15 @@
-import { type LucideIcon, TrendingDown, TrendingUp } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
 import type { FC } from 'react'
 import { Card, CardContent } from '@/components'
-import { cn } from '@/lib'
 
 interface StatsCardProps {
   title: string
   value: string
-  change: string
-  description: string
-  trend: 'up' | 'down'
   icon: LucideIcon
-  isLoading?: boolean
+  isLoading: boolean
 }
 
-export const StatsCard: FC<StatsCardProps> = ({
-  title,
-  value,
-  change,
-  description,
-  trend,
-  icon: Icon,
-  isLoading = false,
-}) => {
+export const StatsCard: FC<StatsCardProps> = ({ title, value, icon: Icon, isLoading }) => {
   return (
     <Card>
       <CardContent className="p-5">
@@ -38,25 +26,6 @@ export const StatsCard: FC<StatsCardProps> = ({
             <Icon className="size-5 text-primary" />
           </div>
         </div>
-
-        {!isLoading && (
-          <div className="mt-3 flex items-center gap-1.5">
-            {trend === 'up' ? (
-              <TrendingUp className="size-3.5 text-primary" />
-            ) : (
-              <TrendingDown className="size-3.5 text-destructive" />
-            )}
-            <span
-              className={cn(
-                'text-xs font-medium',
-                trend === 'up' ? 'text-primary' : 'text-destructive',
-              )}
-            >
-              {change}
-            </span>
-            <span className="text-xs text-muted-foreground">{description}</span>
-          </div>
-        )}
       </CardContent>
     </Card>
   )
