@@ -1,7 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { axiosBaseQuery } from '../../baseQuery'
 
-type UserStats = {
+export type UserStats = {
   total: number
   newThisMonth: number
 }
@@ -14,7 +14,8 @@ export const usersApi = createApi({
   reducerPath: 'usersApi',
   baseQuery: axiosBaseQuery,
   endpoints: ({ query }) => ({
-    getUserStats: query<UserStats, GetUserStatsParams>({
+    // biome-ignore lint/suspicious/noConfusingVoidType: void allows calling hook without arguments
+    getUserStats: query<UserStats, GetUserStatsParams | void>({
       query: (params) => ({ url: '/admin/users/stats', params }),
     }),
   }),
