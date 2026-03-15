@@ -135,3 +135,4 @@ export {
   TooltipContent,
   TooltipProvider,
 } from "./tooltip";
+export { StatusBadge } from './StatusBadge'
