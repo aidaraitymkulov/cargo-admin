@@ -1,13 +1,19 @@
 import { LogOut, Package, PanelLeft, PanelLeftClose } from 'lucide-react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'sonner'
 import { useLogoutMutation } from '@/api/admin/auth/authApi'
 import { authSelectors } from '@/api/admin/auth/authSelectors'
 import { setUser } from '@/api/admin/auth/authSlice'
-import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
-import { navItems, superAdminItems } from '@/config/navigation'
+import {
+  Button,
+  Separator,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components'
+import { navItems, superAdminItems } from '@/config'
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import { cn } from '@/lib/utils'
 import { LogoutDialog } from './LogoutDialog'
@@ -17,8 +23,8 @@ export const AppSidebar = () => {
   const [collapsed, setCollapsed] = useState(false)
   const [logoutOpen, setLogoutOpen] = useState(false)
 
-  const navigate = useNavigate()
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
   const user = useAppSelector(authSelectors.user)
   const [logout, { isLoading: isLoggingOut }] = useLogoutMutation()
 
@@ -27,9 +33,13 @@ export const AppSidebar = () => {
   const fullName = user ? `${user.firstName} ${user.lastName}` : '—'
 
   const handleLogout = async () => {
-    await logout()
-    dispatch(setUser(null))
-    navigate('/login')
+    try {
+      await logout().unwrap()
+      dispatch(setUser(null))
+      navigate('/login', { replace: true })
+    } catch {
+      toast.error('Не удалось выйти из системы. Попробуйте снова.')
+    }
   }
 
   const logoutButton = (

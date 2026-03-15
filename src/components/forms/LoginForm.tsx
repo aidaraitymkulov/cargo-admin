@@ -19,8 +19,8 @@ import { useAppDispatch } from '@/hooks'
 import { type LoginDto, loginDtoSchema } from '@/types'
 
 export function LoginForm() {
-  const navigate = useNavigate()
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
   const [showPassword, setShowPassword] = useState(false)
   const [loginUser, { isLoading: isPending, error }] = useLoginMutation()
 
@@ -33,10 +33,8 @@ export function LoginForm() {
     try {
       const user = await loginUser(data).unwrap()
       dispatch(setUser(user))
-      navigate('/')
-    } catch {
-      // error state handled by RTK Query
-    }
+      navigate('/', { replace: true })
+    } catch {}
   })
 
   const errorMessage =
@@ -46,7 +44,7 @@ export function LoginForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={onSubmit} className="flex flex-col gap-5">
+      <form onSubmit={onSubmit} className="flex flex-col gap-5" autoComplete="off">
         {errorMessage && (
           <div className="rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive">
             {errorMessage}
@@ -62,7 +60,7 @@ export function LoginForm() {
               <FormControl>
                 <Input
                   placeholder="Введите логин"
-                  autoComplete="username"
+                  autoComplete="off"
                   autoFocus
                   disabled={isPending}
                   {...field}
@@ -84,7 +82,7 @@ export function LoginForm() {
                   <Input
                     type={showPassword ? 'text' : 'password'}
                     placeholder="Введите пароль"
-                    autoComplete="current-password"
+                    autoComplete="new-password"
                     disabled={isPending}
                     className="pr-10"
                     {...field}

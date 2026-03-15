@@ -19,14 +19,14 @@ export const SidebarNavItem = ({ item, collapsed }: SidebarNavItemProps) => {
 
   const hasChildren = Boolean(item.children?.length)
   const isChildActive =
-    hasChildren && item.children!.some((c) => location.pathname.startsWith(c.href))
+    hasChildren && item.children?.some((c) => location.pathname.startsWith(c.href))
 
   if (collapsed) {
     return (
       <Tooltip>
         <TooltipTrigger asChild>
           <NavLink
-            to={hasChildren ? (item.children![0].href ?? item.href) : item.href}
+            to={hasChildren ? (item.children?.[0].href ?? item.href) : item.href}
             className={({ isActive }) =>
               cn(
                 'flex h-9 w-9 items-center justify-center rounded-md transition-colors',
@@ -65,7 +65,7 @@ export const SidebarNavItem = ({ item, collapsed }: SidebarNavItemProps) => {
         </Button>
         {open && (
           <div className="ml-4 flex flex-col gap-0.5 border-l border-sidebar-border pl-3 pt-1">
-            {item.children!.map((child) => (
+            {item.children?.map((child) => (
               <NavLink
                 key={child.href}
                 to={child.href}

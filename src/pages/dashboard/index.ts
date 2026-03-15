@@ -1,1 +1,3 @@
-export { DashboardPage } from './DashboardPage'
+import { lazy } from 'react'
+
+export const DashboardPage = lazy(() => import('./DashboardPage'))
