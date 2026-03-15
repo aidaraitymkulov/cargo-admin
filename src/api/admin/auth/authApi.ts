@@ -14,7 +14,6 @@ export const authApi = createApi({
         url: '/auth/login',
         method: 'POST',
         data,
-        headers: { 'X-Client-Type': 'web' },
       }),
       transformResponse: (response: { success: boolean; user: User }) => response.user,
     }),
