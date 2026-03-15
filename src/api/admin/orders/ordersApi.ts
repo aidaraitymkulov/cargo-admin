@@ -10,6 +10,11 @@ export type OrderRevenue = {
   ordersCount: number
 }
 
+export type DailyDelivered = {
+  date: string
+  count: number
+}
+
 type GetOrderStatsParams = {
   branchId?: string
 }
@@ -31,7 +36,11 @@ export const ordersApi = createApi({
     getOrderRevenue: query<OrderRevenue, GetOrderRevenueParams>({
       query: (params) => ({ url: '/admin/orders/revenue', params }),
     }),
+    getDeliveredDaily: query<DailyDelivered[], void>({
+      query: () => ({ url: '/admin/orders/delivered-daily' }),
+    }),
   }),
 })
 
-export const { useGetOrderStatsQuery, useGetOrderRevenueQuery } = ordersApi
+export const { useGetOrderStatsQuery, useGetOrderRevenueQuery, useGetDeliveredDailyQuery } =
+  ordersApi
