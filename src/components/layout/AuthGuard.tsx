@@ -21,9 +21,7 @@ export const AuthGuard = () => {
     )
   }
 
-  if (isError || !data) {
-    return <Navigate to="/login" replace />
-  }
+  if (isError || !data) return <Navigate to="/login" replace />
 
   return <Outlet />
 }

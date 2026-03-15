@@ -5,6 +5,9 @@ import axios, { isAxiosError } from 'axios'
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   withCredentials: true,
+  headers: {
+    'X-Client-Type': 'web',
+  },
 })
 
 api.interceptors.response.use(
@@ -16,12 +19,10 @@ api.interceptors.response.use(
     if (error.response?.status === 401 && !isAuthRequest && !originalRequest._retry) {
       originalRequest._retry = true
       try {
-        await api.post('/auth/refresh', null, {
-          headers: { 'X-Client-Type': 'web' },
-        })
+        await api.post('/auth/refresh')
         return api(originalRequest)
       } catch {
-        window.location.href = '/login'
+        return Promise.reject(error)
       }
     }
 
