@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import { useLogoutMutation } from '@/api/admin/auth/authApi'
 import { authSelectors } from '@/api/admin/auth/authSelectors'
-import { setUser } from '@/api/admin/auth/authSlice'
+import { setManager } from '@/api/admin/auth/authSlice'
 import {
   Button,
   Separator,
@@ -35,7 +35,7 @@ export const AppSidebar = () => {
   const handleLogout = async () => {
     try {
       await logout().unwrap()
-      dispatch(setUser(null))
+      dispatch(setManager(null))
       navigate('/login', { replace: true })
     } catch {
       toast.error('Не удалось выйти из системы. Попробуйте снова.')

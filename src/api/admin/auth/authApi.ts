@@ -1,21 +1,21 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
-import type { LoginDto, User } from '@/types'
+import type { LoginDto, Manager } from '@/types'
 import { axiosBaseQuery } from '../../baseQuery'
 
 export const authApi = createApi({
   reducerPath: 'authApi',
   baseQuery: axiosBaseQuery,
   endpoints: ({ mutation, query }) => ({
-    getMe: query<User, void>({
-      query: () => ({ url: '/users/me' }),
+    getMe: query<Manager, void>({
+      query: () => ({ url: '/admin/me' }),
     }),
-    login: mutation<User, LoginDto>({
+    login: mutation<Manager, LoginDto>({
       query: (data) => ({
         url: '/auth/login',
         method: 'POST',
         data,
       }),
-      transformResponse: (response: { success: boolean; user: User }) => response.user,
+      transformResponse: (response: { success: boolean; user: Manager }) => response.user,
     }),
     logout: mutation<void, void>({
       query: () => ({ url: '/auth/logout', method: 'POST' }),

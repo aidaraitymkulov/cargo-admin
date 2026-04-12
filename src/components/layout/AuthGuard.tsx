@@ -2,7 +2,7 @@ import { Loader2 } from 'lucide-react'
 import { useEffect } from 'react'
 import { Navigate, Outlet } from 'react-router-dom'
 import { useGetMeQuery } from '@/api/admin/auth/authApi'
-import { setUser } from '@/api/admin/auth/authSlice'
+import { setManager } from '@/api/admin/auth/authSlice'
 import { useAppDispatch } from '@/hooks'
 
 export const AuthGuard = () => {
@@ -10,7 +10,7 @@ export const AuthGuard = () => {
   const { data, isLoading, isError } = useGetMeQuery()
 
   useEffect(() => {
-    if (data) dispatch(setUser(data))
+    if (data) dispatch(setManager(data))
   }, [data, dispatch])
 
   if (isLoading) {
