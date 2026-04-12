@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { useLoginMutation } from '@/api/admin/auth/authApi'
-import { setUser } from '@/api/admin/auth/authSlice'
+import { setManager } from '@/api/admin/auth/authSlice'
 import {
   Button,
   Form,
@@ -32,7 +32,7 @@ export function LoginForm() {
   const onSubmit = form.handleSubmit(async (data) => {
     try {
       const user = await loginUser(data).unwrap()
-      dispatch(setUser(user))
+      dispatch(setManager(user))
       navigate('/', { replace: true })
     } catch {}
   })

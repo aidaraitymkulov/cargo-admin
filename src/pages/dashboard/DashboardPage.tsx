@@ -1,7 +1,16 @@
+import { PageHeader } from '@/components'
+import { DashboardStatsCards } from './DashboardStatsCards'
+import { OrdersChart } from './OrdersChart'
+
 const DashboardPage = () => {
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-semibold">Dashboard</h1>
+    <div className="flex flex-col">
+      <PageHeader title="Dashboard" description="Обзор ключевых метрик и последних операций" />
+
+      <div className="flex flex-col gap-6 p-6">
+        <DashboardStatsCards />
+        <OrdersChart />
+      </div>
     </div>
   )
 }
