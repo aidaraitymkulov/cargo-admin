@@ -1,5 +1,5 @@
 import type { Role } from '@/types/enums'
-import type { Branch } from '../branches'
+import type { Branch } from '../branches/branches.ts'
 
 export interface Manager {
   id: string
