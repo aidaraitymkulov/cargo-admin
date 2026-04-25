@@ -40,7 +40,7 @@ type Props = {
 export const ManagerFormDialog = ({ onClose, manager }: Props) => {
   const isEdit = !!manager
   const [showPassword, setShowPassword] = useState(false)
-  const { data: branchesData } = useGetBranchesQuery({ pageSize: 50 })
+  const { data: branchesData } = useGetBranchesQuery()
   const [createManager, { isLoading: isCreating }] = useCreateManagerMutation()
   const [updateManager, { isLoading: isUpdating }] = useUpdateManagerMutation()
 
@@ -112,7 +112,6 @@ export const ManagerFormDialog = ({ onClose, manager }: Props) => {
                 )}
               />
             </div>
-
             <FormField
               control={form.control}
               name="login"
@@ -126,7 +125,6 @@ export const ManagerFormDialog = ({ onClose, manager }: Props) => {
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
               name="password"
@@ -155,7 +153,6 @@ export const ManagerFormDialog = ({ onClose, manager }: Props) => {
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
               name="phone"
@@ -169,7 +166,6 @@ export const ManagerFormDialog = ({ onClose, manager }: Props) => {
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
               name="branchId"
@@ -183,7 +179,7 @@ export const ManagerFormDialog = ({ onClose, manager }: Props) => {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {branchesData?.items.map((branch) => (
+                      {branchesData?.map((branch) => (
                         <SelectItem key={branch.id} value={branch.id}>
                           {branch.address} ({branch.personalCodePrefix})
                         </SelectItem>
@@ -194,7 +190,6 @@ export const ManagerFormDialog = ({ onClose, manager }: Props) => {
                 </FormItem>
               )}
             />
-
             <DialogFooter>
               <Button type="button" variant="outline" onClick={onClose}>
                 Отмена
