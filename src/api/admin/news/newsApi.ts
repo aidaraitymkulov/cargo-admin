@@ -1,12 +1,12 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
-import type { News, SpringPage, UpdateNewsDto } from '@/types'
+import type { News, PaginatedResponse } from '@/types'
 import { axiosBaseQuery } from '../../baseQuery'
 
 const NEWS_TAG = 'News' as const
 
 type GetNewsParams = {
   page?: number
-  size?: number
+  pageSize?: number
 }
 
 export const newsApi = createApi({
@@ -14,8 +14,12 @@ export const newsApi = createApi({
   baseQuery: axiosBaseQuery,
   tagTypes: [NEWS_TAG],
   endpoints: ({ query, mutation }) => ({
-    getNews: query<SpringPage<News>, GetNewsParams>({
+    getNews: query<PaginatedResponse<News>, GetNewsParams>({
       query: (params) => ({ url: '/admin/news', params }),
+      providesTags: [NEWS_TAG],
+    }),
+    getNewsById: query<News, string>({
+      query: (id) => ({ url: `/admin/news/${id}` }),
       providesTags: [NEWS_TAG],
     }),
     createNews: mutation<News, FormData>({
@@ -27,8 +31,13 @@ export const newsApi = createApi({
       }),
       invalidatesTags: [NEWS_TAG],
     }),
-    updateNews: mutation<News, { id: string; data: UpdateNewsDto }>({
-      query: ({ id, data }) => ({ url: `/admin/news/${id}`, method: 'PATCH', data }),
+    updateNews: mutation<News, { id: string; data: FormData }>({
+      query: ({ id, data }) => ({
+        url: `/admin/news/${id}`,
+        method: 'PATCH',
+        data,
+        headers: { 'Content-Type': 'multipart/form-data' },
+      }),
       invalidatesTags: [NEWS_TAG],
     }),
     deleteNews: mutation<void, string>({
@@ -40,6 +49,7 @@ export const newsApi = createApi({
 
 export const {
   useGetNewsQuery,
+  useGetNewsByIdQuery,
   useCreateNewsMutation,
   useUpdateNewsMutation,
   useDeleteNewsMutation,
