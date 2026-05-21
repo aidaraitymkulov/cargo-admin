@@ -12,7 +12,7 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@/components'
+} from '@/components/ui'
 import { navItems, superAdminItems } from '@/config'
 import { useAppDispatch, useAppSelector } from '@/hooks'
 import { cn } from '@/lib/utils'

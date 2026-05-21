@@ -6,13 +6,11 @@ import { useForm } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'sonner'
 import { useGetNewsByIdQuery, useUpdateNewsMutation } from '@/api/admin/news/newsApi'
-import { Button, PageHeader } from '@/components'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
+import { PageHeader } from '@/components/layout'
+import { Button, Input, Label, Textarea } from '@/components/ui'
 import { API_URL } from '@/lib'
 import { cn } from '@/lib/utils'
-import { newsFormSchema } from '@/types'
+import { newsFormSchema } from '@/types/entities/news'
 
 type FormValues = {
   title: string

@@ -16,7 +16,7 @@ import {
   Input,
 } from '@/components/ui'
 import { useAppDispatch } from '@/hooks'
-import { type LoginDto, loginDtoSchema } from '@/types'
+import { type LoginDto, loginDtoSchema } from '@/types/entities/auth'
 
 export function LoginForm() {
   const dispatch = useAppDispatch()

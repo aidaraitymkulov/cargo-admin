@@ -1,5 +1,5 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
-import type { CreateManagerDto, Manager, UpdateManagerDto } from '@/types'
+import type { CreateManagerDto, Manager, UpdateManagerDto } from '@/types/entities/managers'
 import { axiosBaseQuery } from '../../baseQuery'
 
 const MANAGER_TAG = 'Manager' as const

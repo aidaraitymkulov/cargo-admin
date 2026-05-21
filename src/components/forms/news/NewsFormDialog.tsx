@@ -20,7 +20,7 @@ import {
   Input,
   Textarea,
 } from '@/components/ui'
-import { type News, newsFormSchema, type newsFormValues } from '@/types'
+import { type News, newsFormSchema, type newsFormValues } from '@/types/entities/news'
 
 type IProps = {
   onClose: () => void

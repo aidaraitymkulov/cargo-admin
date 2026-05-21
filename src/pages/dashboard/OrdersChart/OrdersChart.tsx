@@ -1,6 +1,6 @@
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { useGetDeliveredDailyQuery } from '@/api/admin/orders/ordersApi'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui'
 
 type TooltipPayload = { value: number }
 
