@@ -28,7 +28,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui'
-import { type Manager, managerFormSchema, type managerFormValues } from '@/types'
+import { type Manager, managerFormSchema, type managerFormValues } from '@/types/entities/managers'
 
 type FormValues = managerFormValues
 

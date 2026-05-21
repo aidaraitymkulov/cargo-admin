@@ -18,7 +18,7 @@ import {
   FormMessage,
   Input,
 } from '@/components/ui'
-import { type Branch, branchFormSchema, type branchFormValues } from '@/types'
+import { type Branch, branchFormSchema, type branchFormValues } from '@/types/entities/branches'
 
 type IProps = {
   onClose: () => void

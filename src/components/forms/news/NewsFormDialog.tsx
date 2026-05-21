@@ -20,7 +20,7 @@ import {
   Input,
   Textarea,
 } from '@/components/ui'
-import { type News, newsFormSchema, type newsFormValues } from '@/types'
+import { type News, newsFormSchema, type newsFormValues } from '@/types/entities/news'
 
 type IProps = {
   onClose: () => void
@@ -47,11 +47,8 @@ export const NewsFormDialog = ({ onClose, news }: IProps) => {
         const formData = new FormData()
         if (values.title !== news.title) formData.append('title', values.title)
         if (values.content !== news.content) formData.append('content', values.content)
-        formData.append('image', values.image)
-        await updateNews({
-          id: news.id,
-          data: { title: values.title, content: values.content, image: values.image },
-        }).unwrap()
+        if (values.image) formData.append('image', values.image)
+        await updateNews({ id: news.id, data: formData }).unwrap()
         toast.success('Новость обновлена')
       } else {
         const formData = new FormData()

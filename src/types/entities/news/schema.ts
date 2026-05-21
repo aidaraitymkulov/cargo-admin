@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-const MAX_FILE_SIZE = 5 * 1024 * 1024
+const MAX_FILE_SIZE = 20 * 1024 * 1024
 
 export const newsFormSchema = z.object({
   title: z.string().min(1, 'Обязательное поле'),

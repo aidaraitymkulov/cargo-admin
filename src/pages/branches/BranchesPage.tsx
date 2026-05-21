@@ -1,22 +1,22 @@
 import { AlertCircle, Loader2, Pencil, Plus } from 'lucide-react'
 import { useState } from 'react'
 import { useGetBranchesQuery } from '@/api/admin/branches/branchesApi'
+import { BranchFormDialog } from '@/components/forms/branches'
+import { PageHeader } from '@/components/layout'
 import {
   Badge,
-  BranchFormDialog,
   Button,
   Card,
   CardContent,
-  PageHeader,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components'
+} from '@/components/ui'
 import { cn } from '@/lib'
-import type { Branch } from '@/types'
+import type { Branch } from '@/types/entities/branches'
 
 const BranchesPage = () => {
   const [editBranch, setEditBranch] = useState<Branch | null>(null)

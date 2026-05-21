@@ -1,5 +1,5 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
-import type { Manager } from '@/types'
+import type { Manager } from '@/types/entities/managers'
 
 interface AuthState {
   user: Manager | null

@@ -1,29 +1,24 @@
-import { AlertCircle, Calendar, Loader2, Pencil, Plus } from 'lucide-react'
+import { AlertCircle, Calendar, Loader2, Plus } from 'lucide-react'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useGetNewsQuery } from '@/api/admin/news/newsApi'
-import { Button, Card, CardContent, NewsFormDialog, PageHeader } from '@/components'
+import { NewsFormDialog } from '@/components/forms/news'
+import { PageHeader } from '@/components/layout'
+import { PaginationControl } from '@/components/shared'
+import { Button, Card, CardContent } from '@/components/ui'
 import { API_URL } from '@/lib'
-import type { News } from '@/types'
+import type { News } from '@/types/entities/news'
 
 const NewsPage = () => {
+  const navigate = useNavigate()
   const [formOpen, setFormOpen] = useState(false)
-  const [editNews, setEditNews] = useState<News | null>(null)
-  const { data, isLoading, isError } = useGetNewsQuery({})
-
-  const openCreate = () => {
-    setEditNews(null)
-    setFormOpen(true)
-  }
-
-  const closeForm = () => {
-    setFormOpen(false)
-    setEditNews(null)
-  }
+  const [page, setPage] = useState(1)
+  const { data, isLoading, isError } = useGetNewsQuery({ page, pageSize: 10 })
 
   return (
     <div className="flex flex-col">
       <PageHeader title="Новости" description="Публикации для пользователей приложения">
-        <Button size="sm" className="gap-1.5" onClick={openCreate}>
+        <Button size="sm" className="gap-1.5" onClick={() => setFormOpen(true)}>
           <Plus className="size-3.5" />
           Создать новость
         </Button>
@@ -42,10 +37,14 @@ const NewsPage = () => {
           </div>
         )}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {data?.content?.map((item: News) => (
-            <Card key={item.id} className="pt-0">
+          {data?.items.map((item: News) => (
+            <Card
+              key={item.id}
+              className="pt-0 cursor-pointer"
+              onClick={() => navigate(`/news/${item.id}`)}
+            >
               <img
-                src={`${API_URL}${item.cover}`}
+                src={`${API_URL}${item.image}`}
                 alt={item.title}
                 className="h-48 w-full object-cover object-center rounded-t-xl"
               />
@@ -54,29 +53,25 @@ const NewsPage = () => {
                 <p className="mt-1.5 text-sm text-muted-foreground leading-relaxed line-clamp-3">
                   {item.content}
                 </p>
-                <div className="mt-3 flex items-center justify-between">
-                  <div className="flex items-center gap-1.5 text-xs text-muted-foreground/60">
-                    <Calendar className="size-3" />
-                    {new Date(item.createdAt).toLocaleDateString('ru-RU')}
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="icon-xs"
-                    onClick={() => {
-                      setEditNews(item)
-                      setFormOpen(true)
-                    }}
-                  >
-                    <Pencil className="size-3.5" />
-                  </Button>
+                <div className="mt-3 flex items-center gap-1.5 text-xs text-muted-foreground/60">
+                  <Calendar className="size-3" />
+                  {new Date(item.createdAt).toLocaleDateString('ru-RU')}
                 </div>
               </CardContent>
             </Card>
           ))}
         </div>
+
+        {data && data.total > data.pageSize && (
+          <PaginationControl
+            page={page}
+            totalPages={Math.ceil(data.total / data.pageSize)}
+            onPageChange={setPage}
+          />
+        )}
       </div>
 
-      {formOpen && <NewsFormDialog onClose={closeForm} news={editNews ?? undefined} />}
+      {formOpen && <NewsFormDialog onClose={() => setFormOpen(false)} />}
     </div>
   )
 }
