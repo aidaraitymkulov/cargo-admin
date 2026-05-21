@@ -1,6 +1,6 @@
 import type { LucideIcon } from 'lucide-react'
 import type { FC } from 'react'
-import { Card, CardContent } from '@/components'
+import { Card, CardContent } from '@/components/ui'
 
 interface StatsCardProps {
   title: string

@@ -1,4 +1,4 @@
-import { PageHeader } from '@/components'
+import { PageHeader } from '@/components/layout/PageHeader'
 import { DashboardStatsCards } from './DashboardStatsCards'
 import { OrdersChart } from './OrdersChart'
 

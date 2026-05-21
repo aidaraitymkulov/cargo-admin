@@ -1,6 +1,7 @@
 import { Suspense } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
-import { AuthGuard, DashboardLayout } from '@/components'
+import { AuthGuard } from '@/components/layout/AuthGuard'
+import { DashboardLayout } from '@/components/layout/DashboardLayout'
 import { LoginPage } from '@/pages/LoginPage'
 import { NewsDetailPage, NewsPage } from '@/pages/news'
 import { BranchesPage } from './pages/branches'

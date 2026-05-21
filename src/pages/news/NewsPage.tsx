@@ -2,16 +2,12 @@ import { AlertCircle, Calendar, Loader2, Plus } from 'lucide-react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGetNewsQuery } from '@/api/admin/news/newsApi'
-import {
-  Button,
-  Card,
-  CardContent,
-  NewsFormDialog,
-  PageHeader,
-  PaginationControl,
-} from '@/components'
+import { NewsFormDialog } from '@/components/forms/news'
+import { PageHeader } from '@/components/layout'
+import { PaginationControl } from '@/components/shared'
+import { Button, Card, CardContent } from '@/components/ui'
 import { API_URL } from '@/lib'
-import type { News } from '@/types'
+import type { News } from '@/types/entities/news'
 
 const NewsPage = () => {
   const navigate = useNavigate()
