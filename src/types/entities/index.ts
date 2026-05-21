@@ -8,3 +8,5 @@ export type {
   Manager,
   UpdateManagerDto,
 } from './managers/managers'
+export type { CreateNewsDto, News, newsFormValues, UpdateNewsDto } from './news'
+export { newsFormSchema } from './news'
