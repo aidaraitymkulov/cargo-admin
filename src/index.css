@@ -181,6 +181,14 @@
     font: inherit;
   }
 
+  input {
+    caret-color: #1A6B3F;
+  }
+
+  .dark input {
+    caret-color: #7DD968;
+  }
+
   button {
     cursor: pointer;
   }
@@ -209,6 +217,22 @@
 
   ::-webkit-scrollbar-thumb:hover {
     @apply bg-muted-foreground/40;
+  }
+
+  /* Autofill — override Chrome's white/yellow injection */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 30px white inset;
+    -webkit-text-fill-color: #1c1917;
+    transition: background-color 5000s ease-in-out 0s;
+  }
+
+  .dark input:-webkit-autofill,
+  .dark input:-webkit-autofill:hover,
+  .dark input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 30px #191d2b inset;
+    -webkit-text-fill-color: white;
   }
 
   /* Selection */
