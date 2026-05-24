@@ -1,3 +1,3 @@
-export type { Branch, CreateBranchDto, UpdateBranchDto } from './branches'
-export type { branchFormValues } from './schema'
+export type { Branch } from './branches'
+export type { BranchFormValues } from './schema'
 export { branchFormSchema } from './schema'

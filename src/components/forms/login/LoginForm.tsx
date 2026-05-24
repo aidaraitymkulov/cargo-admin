@@ -3,9 +3,10 @@ import { AlertTriangle, ArrowRight, Eye, EyeOff, Lock, Mail } from 'lucide-react
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'sonner'
 import { setManager, useLoginMutation } from '@/api/admin/auth'
 import { useAppDispatch } from '@/hooks'
-import { cn } from '@/lib'
+import { cn, getApiErrorMessage } from '@/lib'
 import { type LoginDto, loginDtoSchema } from '@/types/entities/auth'
 
 const fieldCls = (active: boolean) =>
@@ -50,7 +51,12 @@ export const LoginForm = () => {
       const user = await loginUser(data).unwrap()
       dispatch(setManager(user))
       navigate('/', { replace: true })
-    } catch {}
+    } catch (err) {
+      console.error('[LoginForm] login failed:', err)
+      if (!err || typeof err !== 'object' || !('data' in err)) {
+        toast.error(getApiErrorMessage(err, 'Не удалось подключиться к серверу'))
+      }
+    }
   })
 
   return (

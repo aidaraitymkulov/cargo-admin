@@ -9,6 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui'
+import { getApiErrorMessage } from '@/lib'
 import type { Manager } from '@/types'
 
 type Props = {
@@ -24,8 +25,9 @@ export const DeleteManagerDialog = ({ manager, onClose }: Props) => {
       await deleteManager(manager.id).unwrap()
       toast.success('Менеджер удалён')
       onClose()
-    } catch {
-      toast.error('Произошла ошибка')
+    } catch (err) {
+      toast.error(getApiErrorMessage(err))
+      console.error('[DeleteManagerDialog] mutation failed:', err)
     }
   }
 

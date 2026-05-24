@@ -20,6 +20,7 @@ import {
   Input,
   Textarea,
 } from '@/components/ui'
+import { getApiErrorMessage } from '@/lib'
 import { type News, newsFormSchema, type newsFormValues } from '@/types/entities/news'
 
 type IProps = {
@@ -45,8 +46,8 @@ export const NewsFormDialog = ({ onClose, news }: IProps) => {
     try {
       if (isEdit) {
         const formData = new FormData()
-        if (values.title !== news.title) formData.append('title', values.title)
-        if (values.content !== news.content) formData.append('content', values.content)
+        formData.append('title', values.title)
+        formData.append('content', values.content)
         if (values.image) formData.append('image', values.image)
         await updateNews({ id: news.id, data: formData }).unwrap()
         toast.success('Новость обновлена')
@@ -59,8 +60,9 @@ export const NewsFormDialog = ({ onClose, news }: IProps) => {
         toast.success('Новость создана')
       }
       onClose()
-    } catch {
-      toast.error('Произошла ошибка')
+    } catch (err) {
+      toast.error(getApiErrorMessage(err))
+      console.error('[NewsFormDialog] mutation failed:', err)
     }
   }
 
