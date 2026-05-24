@@ -1,4 +1,4 @@
 export * from './branches'
-export { LoginForm } from './LoginForm'
+export { LoginForm } from './login/LoginForm'
 export * from './managers'
 export * from './news'

@@ -1,7 +1,7 @@
 import { Outlet } from 'react-router-dom'
 import { AppSidebar } from './AppSidebar/AppSidebar'
 
-export const DashboardLayout = () => {
+export const Layout = () => {
   return (
     <div className="flex h-full bg-background">
       <AppSidebar />
