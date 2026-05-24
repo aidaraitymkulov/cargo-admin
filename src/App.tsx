@@ -1,9 +1,9 @@
 import { Suspense } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { AuthGuard } from '@/components/layout/AuthGuard'
-import { DashboardLayout } from '@/components/layout/DashboardLayout'
-import { LoginPage } from '@/pages/LoginPage'
+import { LoginPage } from '@/pages/login/LoginPage'
 import { NewsDetailPage, NewsPage } from '@/pages/news'
+import { Layout } from './components/layout'
 import { BranchesPage } from './pages/branches'
 import { DashboardPage } from './pages/dashboard'
 import { ManagersPage } from './pages/managers'
@@ -14,7 +14,7 @@ function App() {
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route element={<AuthGuard />}>
-          <Route element={<DashboardLayout />}>
+          <Route element={<Layout />}>
             <Route path="/" element={<DashboardPage />} />
             <Route path="/managers" element={<ManagersPage />} />
             <Route path="/branches" element={<BranchesPage />} />

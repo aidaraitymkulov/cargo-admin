@@ -2,9 +2,7 @@ import { LogOut, Package, PanelLeft, PanelLeftClose } from 'lucide-react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
-import { useLogoutMutation } from '@/api/admin/auth/authApi'
-import { authSelectors } from '@/api/admin/auth/authSelectors'
-import { setManager } from '@/api/admin/auth/authSlice'
+import { authSelectors, setManager, useLogoutMutation } from '@/api/admin/auth'
 import {
   Button,
   Separator,
