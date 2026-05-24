@@ -1,4 +1,4 @@
-import { zodResolver } from '@hookform/resolvers/zod'
+﻿import { zodResolver } from '@hookform/resolvers/zod'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { ArrowLeft, Loader2 } from 'lucide-react'
 import { useEffect } from 'react'
@@ -57,7 +57,7 @@ const NewsDetailPage = () => {
 
   return (
     <div className="flex flex-col">
-      <PageHeader title={data?.title ?? ''} description="">
+      <PageHeader title={data?.title ?? ''}>
         <Button variant="ghost" size="sm" className="gap-1.5" onClick={() => navigate('/news')}>
           <ArrowLeft className="size-4" />
           Назад

@@ -1,4 +1,4 @@
-import { AlertCircle, Calendar, Loader2, Plus } from 'lucide-react'
+﻿import { AlertCircle, Calendar, Loader2, Plus } from 'lucide-react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useGetNewsQuery } from '@/api/admin/news/newsApi'
@@ -17,7 +17,7 @@ const NewsPage = () => {
 
   return (
     <div className="flex flex-col">
-      <PageHeader title="Новости" description="Публикации для пользователей приложения">
+      <PageHeader title="Новости">
         <Button size="sm" className="gap-1.5" onClick={() => setFormOpen(true)}>
           <Plus className="size-3.5" />
           Создать новость

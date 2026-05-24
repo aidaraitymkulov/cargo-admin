@@ -7,5 +7,5 @@ export type Role = (typeof ROLE)[keyof typeof ROLE]
 
 export const roleLabel: Record<Role, string> = {
   MANAGER: 'Менеджер',
-  SUPER_ADMIN: 'Супер-админ',
+  SUPER_ADMIN: 'Главный администратор',
 }

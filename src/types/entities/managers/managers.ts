@@ -1,4 +1,4 @@
-import type { Role } from '@/types/enums'
+import type { Role } from '@/types/enums/role.ts'
 import type { Branch } from '../branches/branches.ts'
 
 export interface Manager {
