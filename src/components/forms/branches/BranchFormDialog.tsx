@@ -18,7 +18,8 @@ import {
   FormMessage,
   Input,
 } from '@/components/ui'
-import { type Branch, branchFormSchema, type branchFormValues } from '@/types/entities/branches'
+import { getApiErrorMessage } from '@/lib'
+import { type Branch, type BranchFormValues, branchFormSchema } from '@/types/entities/branches'
 
 type IProps = {
   onClose: () => void
@@ -30,7 +31,7 @@ export const BranchFormDialog = ({ onClose, branch }: IProps) => {
   const [createBranch, { isLoading: isCreating }] = useCreateBranchMutation()
   const [updateBranch, { isLoading: isUpdating }] = useUpdateBranchMutation()
 
-  const form = useForm<branchFormValues>({
+  const form = useForm<BranchFormValues>({
     resolver: zodResolver(branchFormSchema),
     defaultValues: {
       address: branch?.address ?? '',
@@ -40,11 +41,11 @@ export const BranchFormDialog = ({ onClose, branch }: IProps) => {
 
   const { dirtyFields } = form.formState
 
-  const onSubmit = async (values: branchFormValues) => {
+  const onSubmit = async (values: BranchFormValues) => {
     try {
       if (isEdit) {
         const changedValues = Object.fromEntries(
-          Object.keys(dirtyFields).map((key) => [key, values[key as keyof branchFormValues]]),
+          Object.keys(dirtyFields).map((key) => [key, values[key as keyof BranchFormValues]]),
         )
         await updateBranch({ id: branch.id, data: changedValues }).unwrap()
         toast.success('Филиал обновлён')
@@ -53,8 +54,9 @@ export const BranchFormDialog = ({ onClose, branch }: IProps) => {
         toast.success('Филиал создан')
       }
       onClose()
-    } catch {
-      toast.error('Произошла ошибка')
+    } catch (err) {
+      toast.error(getApiErrorMessage(err))
+      console.error('[BranchFormDialog] mutation failed:', err)
     }
   }
 

@@ -21,7 +21,8 @@ api.interceptors.response.use(
       try {
         await api.post('/auth/refresh')
         return api(originalRequest)
-      } catch {
+      } catch (refreshErr) {
+        console.error('[baseQuery] Token refresh failed:', refreshErr)
         return Promise.reject(error)
       }
     }
@@ -57,6 +58,7 @@ export const axiosBaseQuery: BaseQueryFn<Args, unknown, QueryError> = async ({
     if (isAxiosError(err)) {
       return { error: { status: err.response?.status, data: err.response?.data } }
     }
-    return { error: { data: 'Unknown error' } }
+    console.error('[axiosBaseQuery] Unexpected non-Axios error:', err)
+    return { error: { data: err instanceof Error ? err.message : 'Unknown error' } }
   }
 }

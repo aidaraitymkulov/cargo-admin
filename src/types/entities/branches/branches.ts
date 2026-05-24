@@ -4,10 +4,3 @@ export interface Branch {
   personalCodePrefix: string
   isActive: boolean
 }
-
-export type CreateBranchDto = {
-  address: string
-  personalCodePrefix: string
-}
-
-export type UpdateBranchDto = Partial<CreateBranchDto>

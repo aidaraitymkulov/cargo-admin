@@ -8,4 +8,4 @@ export const branchFormSchema = z.object({
     .regex(/^[A-Z]+$/, 'Только латинские буквы'),
 })
 
-export type branchFormValues = z.infer<typeof branchFormSchema>
+export type BranchFormValues = z.infer<typeof branchFormSchema>

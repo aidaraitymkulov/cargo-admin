@@ -5,8 +5,8 @@ export const managerFormSchema = z.object({
   password: z.string().min(6, 'Пароль должен содержать не менее 6 символов'),
   firstName: z.string().min(1, 'Обязательное поле'),
   lastName: z.string().min(1, 'Обязательное поле'),
-  phone: z.string().min(1, 'Обязаетльное поле'),
-  branchId: z.string().min(1, 'Выберите филиал'),
+  phone: z.string().min(1, 'Обязательное поле'),
+  branchId: z.string().uuid('Выберите филиал'),
 })
 
 export type managerFormValues = z.infer<typeof managerFormSchema>

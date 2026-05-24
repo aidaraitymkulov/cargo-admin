@@ -28,6 +28,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui'
+import { getApiErrorMessage } from '@/lib'
 import { type Manager, managerFormSchema, type managerFormValues } from '@/types/entities/managers'
 
 type FormValues = managerFormValues
@@ -71,8 +72,9 @@ export const ManagerFormDialog = ({ onClose, manager }: Props) => {
         toast.success('Менеджер создан')
       }
       onClose()
-    } catch {
-      toast.error('Произошла ошибка')
+    } catch (err) {
+      toast.error(getApiErrorMessage(err))
+      console.error('[ManagerFormDialog] mutation failed:', err)
     }
   }
 

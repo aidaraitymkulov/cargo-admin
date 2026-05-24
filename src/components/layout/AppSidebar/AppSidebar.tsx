@@ -1,10 +1,6 @@
 import { LogOut, Package, PanelLeft, PanelLeftClose } from 'lucide-react'
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { toast } from 'sonner'
-import { useLogoutMutation } from '@/api/admin/auth/authApi'
-import { authSelectors } from '@/api/admin/auth/authSelectors'
-import { setManager } from '@/api/admin/auth/authSlice'
+import { authSelectors } from '@/api/admin/auth'
 import {
   Button,
   Separator,
@@ -14,7 +10,7 @@ import {
   TooltipTrigger,
 } from '@/components/ui'
 import { navItems, superAdminItems } from '@/config'
-import { useAppDispatch, useAppSelector } from '@/hooks'
+import { useAppSelector } from '@/hooks'
 import { cn } from '@/lib/utils'
 import { LogoutDialog } from './LogoutDialog'
 import { SidebarNavItem } from './SidebarNavitem'
@@ -23,24 +19,11 @@ export const AppSidebar = () => {
   const [collapsed, setCollapsed] = useState(false)
   const [logoutOpen, setLogoutOpen] = useState(false)
 
-  const dispatch = useAppDispatch()
-  const navigate = useNavigate()
   const user = useAppSelector(authSelectors.user)
-  const [logout, { isLoading: isLoggingOut }] = useLogoutMutation()
 
   const initials = user ? `${user.firstName[0]}${user.lastName[0]}`.toUpperCase() : '??'
 
   const fullName = user ? `${user.firstName} ${user.lastName}` : '—'
-
-  const handleLogout = async () => {
-    try {
-      await logout().unwrap()
-      dispatch(setManager(null))
-      navigate('/login', { replace: true })
-    } catch {
-      toast.error('Не удалось выйти из системы. Попробуйте снова.')
-    }
-  }
 
   const logoutButton = (
     <Button
@@ -61,7 +44,6 @@ export const AppSidebar = () => {
           collapsed ? 'w-16' : 'w-64',
         )}
       >
-        {/* Logo */}
         <div
           className={cn(
             'flex h-14 items-center border-b border-sidebar-border px-4',
@@ -79,7 +61,6 @@ export const AppSidebar = () => {
           )}
         </div>
 
-        {/* Nav */}
         <nav className="flex-1 overflow-y-auto px-3 py-4">
           <div className="flex flex-col gap-1">
             {navItems.map((item) => (
@@ -101,7 +82,6 @@ export const AppSidebar = () => {
           </div>
         </nav>
 
-        {/* User */}
         <div className="border-t border-sidebar-border p-3">
           <div className={cn('flex items-center', collapsed ? 'justify-center' : 'gap-3')}>
             {!collapsed && (
@@ -128,7 +108,6 @@ export const AppSidebar = () => {
           </div>
         </div>
 
-        {/* Collapse toggle */}
         <div className="border-t border-sidebar-border p-2">
           <Button
             variant="ghost"
@@ -151,12 +130,7 @@ export const AppSidebar = () => {
         </div>
       </aside>
 
-      <LogoutDialog
-        open={logoutOpen}
-        isLoading={isLoggingOut}
-        onConfirm={handleLogout}
-        onCancel={() => setLogoutOpen(false)}
-      />
+      <LogoutDialog open={logoutOpen} onCancel={() => setLogoutOpen(false)} />
     </TooltipProvider>
   )
 }

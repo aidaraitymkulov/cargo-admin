@@ -1,8 +1,8 @@
 import { Loader2 } from 'lucide-react'
 import { useEffect } from 'react'
 import { Navigate, Outlet } from 'react-router-dom'
-import { useGetMeQuery } from '@/api/admin/auth/authApi'
-import { setManager } from '@/api/admin/auth/authSlice'
+import { setManager, useGetMeQuery } from '@/api/admin/auth'
+import { ROUTES } from '@/config'
 import { useAppDispatch } from '@/hooks'
 
 export const AuthGuard = () => {
@@ -21,7 +21,7 @@ export const AuthGuard = () => {
     )
   }
 
-  if (isError || !data) return <Navigate to="/login" replace />
+  if (isError || !data) return <Navigate to={ROUTES.LOGIN} replace />
 
   return <Outlet />
 }

@@ -1,28 +1,24 @@
 import { Suspense } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { AuthGuard } from '@/components/layout/AuthGuard'
-import { DashboardLayout } from '@/components/layout/DashboardLayout'
-import { LoginPage } from '@/pages/LoginPage'
-import { NewsDetailPage, NewsPage } from '@/pages/news'
-import { BranchesPage } from './pages/branches'
-import { DashboardPage } from './pages/dashboard'
-import { ManagersPage } from './pages/managers'
+import { LoginPage } from '@/pages/login/LoginPage'
+import { Layout } from './components/layout'
+import { ROUTES } from './config'
+import { protectedRoutes } from './router'
 
 function App() {
   return (
     <Suspense>
       <Routes>
-        <Route path="/login" element={<LoginPage />} />
+        <Route path={ROUTES.LOGIN} element={<LoginPage />} />
         <Route element={<AuthGuard />}>
-          <Route element={<DashboardLayout />}>
-            <Route path="/" element={<DashboardPage />} />
-            <Route path="/managers" element={<ManagersPage />} />
-            <Route path="/branches" element={<BranchesPage />} />
-            <Route path="news" element={<NewsPage />} />
-            <Route path="news/:id" element={<NewsDetailPage />} />
+          <Route element={<Layout />}>
+            {protectedRoutes.map(({ path, element }) => (
+              <Route key={path} path={path} element={element} />
+            ))}
           </Route>
         </Route>
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="*" element={<Navigate to={ROUTES.DASHBOARD} replace />} />
       </Routes>
     </Suspense>
   )

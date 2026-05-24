@@ -12,12 +12,3 @@ export interface Manager {
   branch: Branch | null
   createdAt: string
 }
-
-export type CreateManagerDto = Pick<
-  Manager,
-  'login' | 'password' | 'firstName' | 'lastName' | 'phone'
-> & {
-  branchId: string
-}
-
-export type UpdateManagerDto = Partial<CreateManagerDto>
