@@ -34,8 +34,13 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-forest-50: #F2F9EC;
+  --color-forest-400: #7DD968;
+  --color-forest-500: #34A05A;
   --color-forest-700: #1A6B3F;
+  --color-forest-800: #155A34;
   --color-forest-900: #0E3826;
+  --color-ink-800: #1A2035;
+  --color-ink-900: #0F1422;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -120,6 +125,12 @@
   --chart-4: oklch(0.627 0.265 303.9);
   --chart-5: oklch(0.645 0.246 16.439);
 }
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-rise { animation: rise 0.15s ease-out; }
 
 @layer base {
   *,

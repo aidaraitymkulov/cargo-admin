@@ -1,5 +1,5 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
-import type { Branch, BranchFormValues } from '@/types'
+import type { Branch, BranchFormValues } from '@/types/entities/branches'
 import { axiosBaseQuery } from '../../baseQuery'
 
 const BRANCH_TAG = 'Branch' as const

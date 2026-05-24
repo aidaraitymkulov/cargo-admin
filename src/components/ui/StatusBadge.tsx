@@ -1,5 +1,5 @@
-import { cn } from '@/lib'
-import { PARCEL_STATUS, type ParcelStatus, parcelStatusLabel } from '@/types'
+import { cn } from '@/lib/utils'
+import { PARCEL_STATUS, type ParcelStatus, parcelStatusLabel } from '@/types/enums/parcel'
 import { Badge } from './badge'
 
 export const StatusBadge = ({ status }: { status: ParcelStatus }) => {

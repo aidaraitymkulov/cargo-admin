@@ -1,4 +1,4 @@
-import { zodResolver } from '@hookform/resolvers/zod'
+﻿import { zodResolver } from '@hookform/resolvers/zod'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { ArrowLeft, Loader2 } from 'lucide-react'
 import { useEffect } from 'react'
@@ -9,7 +9,7 @@ import { useGetNewsByIdQuery, useUpdateNewsMutation } from '@/api/admin/news/new
 import { PageHeader } from '@/components/layout'
 import { Button, Input, Label, Textarea } from '@/components/ui'
 import { API_URL } from '@/lib'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils/cn'
 import { newsFormSchema } from '@/types/entities/news'
 
 type FormValues = {
@@ -57,7 +57,7 @@ const NewsDetailPage = () => {
 
   return (
     <div className="flex flex-col">
-      <PageHeader title={data?.title ?? ''} description="">
+      <PageHeader title={data?.title ?? ''}>
         <Button variant="ghost" size="sm" className="gap-1.5" onClick={() => navigate('/news')}>
           <ArrowLeft className="size-4" />
           Назад

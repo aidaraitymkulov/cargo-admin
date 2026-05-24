@@ -1,25 +1,34 @@
-import { cn } from '@/lib'
+import { ChevronRight } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { ThemeToggle } from '@/components/shared'
+import { cn } from '@/lib/utils'
 
-interface PageHeaderProps {
+interface IProps {
   title: string
-  description?: string
   children?: React.ReactNode
   className?: string
 }
 
-export const PageHeader = ({ title, description, children, className }: PageHeaderProps) => {
-  return (
-    <div
-      className={cn(
-        'flex flex-col gap-1 border-b border-border bg-background px-6 py-5 sm:flex-row sm:items-center sm:justify-between sm:gap-4',
-        className,
-      )}
-    >
-      <div>
-        <h1 className="text-xl font-semibold text-foreground text-balance">{title}</h1>
-        {description && <p className="mt-0.5 text-sm text-muted-foreground">{description}</p>}
-      </div>
-      {children && <div className="flex items-center gap-2">{children}</div>}
+export const PageHeader = ({ title, children, className }: IProps) => (
+  <header
+    className={cn(
+      'sticky top-0 z-5 flex h-16 shrink-0 items-center gap-4 px-7',
+      'border-b border-stone-200/70 dark:border-white/6',
+      'bg-white/70 dark:bg-ink-900/70 backdrop-blur-xl',
+      className,
+    )}
+  >
+    <nav className="flex items-center gap-1.5 text-[12.5px] font-medium text-stone-400 dark:text-white/35">
+      <Link to="/" className="transition-colors hover:text-stone-700 dark:hover:text-white/70">
+        Главная
+      </Link>
+      <ChevronRight size={13} strokeWidth={2.5} />
+      <span className="text-stone-900 dark:text-white">{title}</span>
+    </nav>
+
+    <div className="ml-auto flex items-center gap-2">
+      {children}
+      <ThemeToggle />
     </div>
-  )
-}
+  </header>
+)

@@ -1,4 +1,4 @@
-import { AlertCircle, Loader2, Pencil, Plus } from 'lucide-react'
+﻿import { AlertCircle, Loader2, Pencil, Plus } from 'lucide-react'
 import { useState } from 'react'
 import { useGetBranchesQuery } from '@/api/admin/branches/branchesApi'
 import { BranchFormDialog } from '@/components/forms/branches'
@@ -15,7 +15,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui'
-import { cn } from '@/lib'
+import { cn } from '@/lib/utils'
 import type { Branch } from '@/types/entities/branches'
 
 const BranchesPage = () => {
@@ -35,7 +35,7 @@ const BranchesPage = () => {
 
   return (
     <div className="flex flex-col">
-      <PageHeader title="Филиалы" description="Управление филиалами AdesExpress">
+      <PageHeader title="Филиалы">
         <Button size="sm" className="gap-1.5" onClick={openCreate}>
           <Plus className="size-3.5" />
           Добавить филиал
