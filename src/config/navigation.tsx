@@ -58,12 +58,10 @@ export const superAdminItems: NavItem[] = [
     label: 'Менеджеры',
     href: '/managers',
     icon: <UserCog className="size-4" />,
-    superAdminOnly: true,
   },
   {
     label: 'Филиалы',
     href: '/branches',
     icon: <Building2 className="size-4" />,
-    superAdminOnly: true,
   },
 ]

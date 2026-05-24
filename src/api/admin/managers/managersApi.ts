@@ -1,5 +1,5 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
-import type { CreateManagerDto, Manager, UpdateManagerDto } from '@/types/entities/managers'
+import type { Manager, managerFormValues } from '@/types/entities/managers'
 import { axiosBaseQuery } from '../../baseQuery'
 
 const MANAGER_TAG = 'Manager' as const
@@ -13,11 +13,11 @@ export const managersApi = createApi({
       query: () => ({ url: '/admin/managers' }),
       providesTags: [MANAGER_TAG],
     }),
-    createManager: mutation<Manager, CreateManagerDto>({
+    createManager: mutation<Manager, managerFormValues>({
       query: (data) => ({ url: '/admin/managers', method: 'POST', data }),
       invalidatesTags: [MANAGER_TAG],
     }),
-    updateManager: mutation<Manager, { id: string; data: UpdateManagerDto }>({
+    updateManager: mutation<Manager, { id: string; data: Partial<managerFormValues> }>({
       query: ({ id, data }) => ({
         url: `/admin/managers/${id}`,
         method: 'PATCH',

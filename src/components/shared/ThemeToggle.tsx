@@ -27,9 +27,9 @@ export const ThemeToggle = ({ tone = 'light', className }: ThemeToggleProps) => 
       )}
     >
       {theme === 'dark' ? (
-        <Sun strokeWidth={1.8} className="w-4.5 h-4.5" />
+        <Sun strokeWidth={1.8} size={18} />
       ) : (
-        <Moon strokeWidth={1.8} className="w-4.5 h-4.5" />
+        <Moon strokeWidth={1.8} size={18} />
       )}
     </button>
   )
