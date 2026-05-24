@@ -1,9 +1,8 @@
 import { ChevronDown } from 'lucide-react'
 import { useState } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
-import { cn } from '@/lib/utils'
+import { Button, Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui'
+import { cn } from '@/lib'
 import type { NavItem } from '@/types'
 
 interface SidebarNavItemProps {

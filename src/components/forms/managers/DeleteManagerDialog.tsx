@@ -1,14 +1,14 @@
 import { Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { useDeleteManagerMutation } from '@/api/admin/managers/managersApi'
-import { Button } from '@/components/ui/button'
 import {
+  Button,
   Dialog,
   DialogContent,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog'
+} from '@/components/ui'
 import type { Manager } from '@/types'
 
 type Props = {
