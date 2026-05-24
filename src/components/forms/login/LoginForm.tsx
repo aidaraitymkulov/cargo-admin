@@ -6,7 +6,8 @@ import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import { setManager, useLoginMutation } from '@/api/admin/auth'
 import { useAppDispatch } from '@/hooks'
-import { cn, getApiErrorMessage } from '@/lib'
+import { getApiErrorMessage } from '@/lib'
+import { cn } from '@/lib/utils'
 import { type LoginDto, loginDtoSchema } from '@/types/entities/auth'
 
 const fieldCls = (active: boolean) =>

@@ -1,7 +1,7 @@
 import { ChevronsLeft, ChevronsRight } from 'lucide-react'
 import { useState } from 'react'
 import { TooltipProvider } from '@/components/ui'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils/cn'
 import { LogoutDialog } from './LogoutDialog'
 import { SidebarHeader } from './SidebarHeader'
 import { SidebarNav } from './SidebarNav'

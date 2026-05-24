@@ -2,7 +2,7 @@ import { ChevronDown } from 'lucide-react'
 import { useState } from 'react'
 import { matchPath, NavLink, useLocation } from 'react-router-dom'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui'
-import { cn } from '@/lib'
+import { cn } from '@/lib/utils'
 import type { NavItem } from '@/types/navigation'
 
 interface IProps {

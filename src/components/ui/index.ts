@@ -135,4 +135,5 @@ export {
   TooltipContent,
   TooltipProvider,
 } from "./tooltip";
+export { Spinner } from './spinner'
 export { StatusBadge } from './StatusBadge'

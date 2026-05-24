@@ -1,7 +1,7 @@
 import { ChevronRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { ThemeToggle } from '@/components/shared'
-import { cn } from '@/lib'
+import { cn } from '@/lib/utils'
 
 interface IProps {
   title: string
