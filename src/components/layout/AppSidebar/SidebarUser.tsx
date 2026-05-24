@@ -2,7 +2,7 @@ import { LogOut } from 'lucide-react'
 import { authSelectors } from '@/api/admin/auth'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui'
 import { useAppSelector } from '@/hooks'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils/cn'
 import { roleLabel } from '@/types/enums/role'
 
 interface IProps {

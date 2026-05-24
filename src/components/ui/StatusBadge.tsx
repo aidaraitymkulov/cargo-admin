@@ -1,4 +1,4 @@
-import { cn } from '@/lib'
+import { cn } from '@/lib/utils'
 import { PARCEL_STATUS, type ParcelStatus, parcelStatusLabel } from '@/types/enums/parcel'
 import { Badge } from './badge'
 

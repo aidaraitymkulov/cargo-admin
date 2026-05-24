@@ -15,7 +15,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui'
-import { cn } from '@/lib'
+import { cn } from '@/lib/utils'
 import type { Branch } from '@/types/entities/branches'
 
 const BranchesPage = () => {

@@ -9,7 +9,7 @@ import { useGetNewsByIdQuery, useUpdateNewsMutation } from '@/api/admin/news/new
 import { PageHeader } from '@/components/layout'
 import { Button, Input, Label, Textarea } from '@/components/ui'
 import { API_URL } from '@/lib'
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils/cn'
 import { newsFormSchema } from '@/types/entities/news'
 
 type FormValues = {
