@@ -1,4 +1,4 @@
-import { AlertCircle, Loader2, Pencil, Plus, Trash2 } from 'lucide-react'
+﻿import { AlertCircle, Loader2, Pencil, Plus, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import { useGetManagersQuery } from '@/api/admin/managers/managersApi'
 import { DeleteManagerDialog, ManagerFormDialog } from '@/components/forms/managers'
@@ -40,7 +40,7 @@ const ManagersPage = () => {
 
   return (
     <div className="flex flex-col">
-      <PageHeader title="Менеджеры" description="Управление менеджерами системы">
+      <PageHeader title="Менеджеры">
         <Button size="sm" className="gap-1.5" onClick={openCreate}>
           <Plus className="size-3.5" />
           Добавить менеджера
