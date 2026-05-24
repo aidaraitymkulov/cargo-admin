@@ -1,5 +1,6 @@
-import { LoginForm } from '@/components/forms'
+import { LoginForm } from '@/components/forms/login'
 import { LoginBackground } from '@/components/layout/login'
+import { ThemeToggle } from '@/components/shared'
 
 export const LoginPage = () => {
   return (
@@ -9,25 +10,33 @@ export const LoginPage = () => {
     >
       <LoginBackground />
 
+      <div className="absolute right-6 top-6 z-10">
+        <ThemeToggle tone="dark" />
+      </div>
+
       <p className="absolute bottom-5 left-1/2 z-10 -translate-x-1/2 font-mono text-[10px] tracking-widest text-white/35">
         ADES ADMIN · v 4.12.0
       </p>
 
-      <div className="relative z-10 w-full max-w-110 rounded-2xl bg-white p-10 shadow-[0_30px_80px_-20px_rgba(0,0,0,.55),0_0_0_1px_rgba(255,255,255,.06)]">
+      <div className="relative z-10 w-full max-w-110 rounded-2xl bg-white p-10 shadow-[0_30px_80px_-20px_rgba(0,0,0,.55),0_0_0_1px_rgba(255,255,255,.06)] dark:bg-[#0F1422]">
         <div className="mb-8 flex items-center gap-3">
-          <img src="/logo.png" alt="ADES" className="h-9" />
-          <div className="ml-1 border-l border-stone-200 pl-3 leading-tight">
-            <div className="font-mono text-[10px] font-semibold tracking-[.16em] text-forest-700">
+          <img src="/logo.png" alt="ADES" className="h-9 dark:invert dark:brightness-0" />
+          <div className="ml-1 border-l border-stone-200 pl-3 leading-tight dark:border-white/15">
+            <div className="font-mono text-[10px] font-semibold tracking-[.16em] text-forest-700 dark:text-forest-400">
               ADMIN · CONSOLE
             </div>
-            <div className="mt-0.5 text-xs text-stone-500">Внутренняя панель</div>
+            <div className="mt-0.5 text-xs text-stone-500 dark:text-white/50">
+              Внутренняя панель
+            </div>
           </div>
         </div>
 
-        <h1 className="mb-1 text-[28px] font-bold tracking-tight text-stone-900">
+        <h1 className="mb-1 text-[28px] font-bold tracking-tight text-stone-900 dark:text-white">
           Вход для сотрудников
         </h1>
-        <p className="mb-7 text-[14px] text-stone-500">Используйте корпоративный логин и пароль.</p>
+        <p className="mb-7 text-[14px] text-stone-500 dark:text-white/55">
+          Используйте корпоративный логин и пароль.
+        </p>
 
         <LoginForm />
       </div>
