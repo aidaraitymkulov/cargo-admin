@@ -69,6 +69,8 @@ export {
   FormField,
   useFormField,
 } from "./form";
+export { Dropdown } from "./dropdown"
+export type { DropdownOption } from "./dropdown"
 export { Input } from "./input";
 export { Label } from "./label";
 export {

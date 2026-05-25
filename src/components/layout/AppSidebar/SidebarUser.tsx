@@ -1,9 +1,12 @@
 import { LogOut } from 'lucide-react'
 import { authSelectors } from '@/api/admin/auth'
+import { InitialsAvatar } from '@/components/shared/InitialsAvatar'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui'
 import { useAppSelector } from '@/hooks'
 import { cn } from '@/lib/utils/cn'
 import { roleLabel } from '@/types/enums/role'
+
+const BRAND_GRADIENT: [string, string] = ['#34A05A', '#1A6B3F']
 
 interface IProps {
   collapsed: boolean
@@ -13,24 +16,16 @@ interface IProps {
 export const SidebarUser = ({ collapsed, onLogout }: IProps) => {
   const user = useAppSelector(authSelectors.user)
 
-  const initials = user
-    ? [user.firstName[0], user.lastName[0]].filter(Boolean).join('').toUpperCase() || '??'
-    : '??'
   const fullName = user ? [user.firstName, user.lastName].filter(Boolean).join(' ') || '—' : '—'
   const roleLabelText = user ? (roleLabel[user.role] ?? user.role) : '—'
+  const firstName = user?.firstName ?? ''
+  const lastName = user?.lastName ?? ''
 
-  const avatar = (
-    <div
-      className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-lg
-                 bg-linear-to-br from-forest-500 to-forest-700 text-[13px]
-                 font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,.2)]"
-    >
-      {initials}
-      <span
-        className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full
-                   bg-emerald-500 ring-2 ring-white dark:ring-ink-900"
-      />
-    </div>
+  const onlineDot = (
+    <span
+      className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full
+                 bg-emerald-500 ring-2 ring-white dark:ring-ink-900"
+    />
   )
 
   return (
@@ -40,25 +35,29 @@ export const SidebarUser = ({ collapsed, onLogout }: IProps) => {
       {collapsed ? (
         <Tooltip>
           <TooltipTrigger asChild>
-            <button
-              type="button"
-              onClick={onLogout}
-              className="relative mx-auto flex h-9 w-9 items-center justify-center rounded-lg
-                         bg-linear-to-br from-forest-500 to-forest-700 text-[13px]
-                         font-semibold text-white shadow-[inset_0_1px_0_rgba(255,255,255,.2)]"
-            >
-              {initials}
-              <span
-                className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full
-                           bg-emerald-500 ring-2 ring-white dark:ring-ink-900"
+            <button type="button" onClick={onLogout} className="relative mx-auto flex h-9 w-9">
+              <InitialsAvatar
+                firstName={firstName}
+                lastName={lastName}
+                gradient={BRAND_GRADIENT}
+                className="w-9 h-9"
               />
+              {onlineDot}
             </button>
           </TooltipTrigger>
           <TooltipContent side="right">Выйти</TooltipContent>
         </Tooltip>
       ) : (
         <div className="flex items-center gap-2.5 rounded-xl p-2 hover:bg-stone-100/70 dark:hover:bg-white/4">
-          {avatar}
+          <div className="relative shrink-0">
+            <InitialsAvatar
+              firstName={firstName}
+              lastName={lastName}
+              gradient={BRAND_GRADIENT}
+              className="w-9 h-9"
+            />
+            {onlineDot}
+          </div>
           <div className="min-w-0 flex-1 leading-tight">
             <div className="truncate text-[13px] font-semibold text-stone-900 dark:text-white">
               {fullName}

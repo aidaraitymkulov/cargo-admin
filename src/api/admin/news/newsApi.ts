@@ -1,5 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
-import type { News, PaginatedResponse } from '@/types'
+import type { News } from '@/types/entities/news'
+import type { PaginatedResponse } from '@/types/pagination'
 import { axiosBaseQuery } from '../../baseQuery'
 
 const NEWS_TAG = 'News' as const

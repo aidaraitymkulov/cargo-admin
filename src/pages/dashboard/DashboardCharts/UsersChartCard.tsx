@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useGetUsersChartQuery } from '@/api/admin/dashboard'
-import { useTheme } from '@/hooks/useTheme'
+import { useTheme } from '@/hooks'
 import {
   ChartCardShell,
   ChartLoadingBody,

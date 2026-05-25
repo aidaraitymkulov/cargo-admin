@@ -1,19 +1,10 @@
-﻿import { AlertCircle, Loader2, Pencil, Plus, Trash2 } from 'lucide-react'
+import { Plus } from 'lucide-react'
 import { useState } from 'react'
-import { useGetManagersQuery } from '@/api/admin/managers/managersApi'
+import { useGetManagersQuery } from '@/api/admin/managers'
 import { DeleteManagerDialog, ManagerFormDialog } from '@/components/forms/managers'
 import { PageHeader } from '@/components/layout'
-import {
-  Button,
-  Card,
-  CardContent,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui'
+import { ManagersTable } from '@/components/tables'
+import { Button } from '@/components/ui'
 import type { Manager } from '@/types/entities/managers'
 
 const ManagersPage = () => {
@@ -27,12 +18,10 @@ const ManagersPage = () => {
     setEditManager(null)
     setFormOpen(true)
   }
-
-  const openEdit = (manager: Manager) => {
-    setEditManager(manager)
+  const openEdit = (m: Manager) => {
+    setEditManager(m)
     setFormOpen(true)
   }
-
   const closeForm = () => {
     setFormOpen(false)
     setEditManager(null)
@@ -41,82 +30,29 @@ const ManagersPage = () => {
   return (
     <div className="flex flex-col">
       <PageHeader title="Менеджеры">
-        <Button size="sm" className="gap-1.5" onClick={openCreate}>
-          <Plus className="size-3.5" />
-          Добавить менеджера
-        </Button>
+        {data && data.length > 0 && (
+          <Button variant="forest" className="rounded-lg" onClick={openCreate}>
+            <Plus size={15} strokeWidth={2.5} />
+            Создать менеджера
+          </Button>
+        )}
       </PageHeader>
 
-      <div className="p-6">
-        <Card>
-          <CardContent className="p-0">
-            <Table>
-              <TableHeader>
-                <TableRow className="hover:bg-transparent">
-                  <TableHead className="pl-6">Имя</TableHead>
-                  <TableHead>Логин</TableHead>
-                  <TableHead>Телефон</TableHead>
-                  <TableHead>Филиал</TableHead>
-                  <TableHead className="w-20 pr-6" />
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {isLoading && (
-                  <TableRow>
-                    <TableCell colSpan={6} className="py-10">
-                      <div className="flex justify-center">
-                        <Loader2 className="size-10 animate-spin text-muted-foreground" />
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                )}
-                {isError && (
-                  <TableRow>
-                    <TableCell colSpan={6} className="py-10">
-                      <div className="flex flex-col items-center gap-2 text-destructive">
-                        <AlertCircle className="size-10" />
-                        <p className="text-sm">Не удалось загрузить менеджеров</p>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                )}
-                {data?.map((manager) => (
-                  <TableRow key={manager.id}>
-                    <TableCell className="pl-6 font-medium text-foreground">
-                      {manager.firstName} {manager.lastName}
-                    </TableCell>
-                    <TableCell>
-                      <code className="rounded bg-muted px-1.5 py-0.5 text-xs font-mono">
-                        {manager.login}
-                      </code>
-                    </TableCell>
-                    <TableCell className="text-muted-foreground">{manager.phone}</TableCell>
-                    <TableCell className="text-muted-foreground">
-                      {manager.branch
-                        ? `${manager.branch.address} (${manager.branch.personalCodePrefix})`
-                        : '—'}
-                    </TableCell>
-                    <TableCell className="pr-6">
-                      <div className="flex items-center justify-end gap-1">
-                        <Button variant="ghost" size="icon-xs" onClick={() => openEdit(manager)}>
-                          <Pencil className="size-3.5" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="icon-xs"
-                          className="text-destructive hover:text-destructive"
-                          onClick={() => setDeleteManager(manager)}
-                        >
-                          <Trash2 className="size-3.5" />
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
+      <div className="max-w-300 mx-auto w-full px-7 py-7">
+        <div className="mb-6">
+          <h1 className="text-[24px] font-bold tracking-[-0.025em] text-stone-900 dark:text-white">
+            Менеджеры
+          </h1>
+        </div>
+
+        <ManagersTable
+          managers={data ?? []}
+          isLoading={isLoading}
+          isError={isError}
+          onAdd={openCreate}
+          onEdit={openEdit}
+          onDelete={setDeleteManager}
+        />
       </div>
 
       {formOpen && <ManagerFormDialog onClose={closeForm} manager={editManager ?? undefined} />}
