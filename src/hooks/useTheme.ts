@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 
 type Theme = 'light' | 'dark'
 
-export function useTheme() {
+export const useTheme = () => {
   const [theme, setTheme] = useState<Theme>(() => {
     try {
       return localStorage.getItem('theme') === 'dark' ? 'dark' : 'light'

@@ -1,5 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
-import type { LoginDto, Manager } from '@/types'
+import type { LoginDto } from '@/types/entities/auth'
+import type { Manager } from '@/types/entities/managers'
 import { axiosBaseQuery } from '../../baseQuery'
 
 export const authApi = createApi({
