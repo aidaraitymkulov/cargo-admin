@@ -12,7 +12,7 @@ import {
 } from '@/components/ui'
 import { fmtDate } from '@/lib/utils'
 import type { Manager } from '@/types/entities/managers'
-import { ROLE } from '@/types/enums/role'
+import { roleLabel } from '@/types/enums/role'
 
 const HEAD_CLS =
   'text-[10.5px] font-semibold font-mono tracking-widest uppercase text-stone-400 dark:text-white/30 h-10.5'
@@ -24,6 +24,7 @@ interface ManagersTableProps {
   onAdd: () => void
   onEdit: (m: Manager) => void
   onDelete: (m: Manager) => void
+  onRetry?: () => void
 }
 
 export const ManagersTable = ({
@@ -33,6 +34,7 @@ export const ManagersTable = ({
   onAdd,
   onEdit,
   onDelete,
+  onRetry,
 }: ManagersTableProps) => (
   <div
     className="rounded-2xl overflow-hidden bg-white dark:bg-ink-900
@@ -51,6 +53,16 @@ export const ManagersTable = ({
         <p className="text-[14px] text-stone-400 dark:text-white/35">
           Не удалось загрузить менеджеров
         </p>
+        {onRetry && (
+          <Button
+            variant="ghost"
+            size="sm"
+            className="text-stone-500 dark:text-white/50"
+            onClick={onRetry}
+          >
+            Попробовать снова
+          </Button>
+        )}
       </div>
     ) : managers.length === 0 ? (
       <div className="flex flex-col items-center justify-center py-24 gap-4">
@@ -136,11 +148,7 @@ export const ManagersTable = ({
               </TableCell>
 
               <TableCell>
-                <Badge
-                  variant={m.role === ROLE.SUPER_ADMIN ? BADGE_VARIANT.AMBER : BADGE_VARIANT.GREEN}
-                >
-                  {m.role}
-                </Badge>
+                <Badge variant={BADGE_VARIANT.GREEN}>{roleLabel[m.role]}</Badge>
               </TableCell>
 
               <TableCell className="text-[12px] text-stone-400 dark:text-white/32 font-medium">

@@ -16,13 +16,12 @@ function paletteGrad(name: string): [string, string] {
 interface Props {
   firstName: string
   lastName: string
-  /** Override auto-palette gradient [from, to] hex colors */
   gradient?: [string, string]
   className?: string
 }
 
 export const InitialsAvatar = ({ firstName, lastName, gradient, className }: Props) => {
-  const text = ((firstName?.[0] ?? '') + (lastName?.[0] ?? '')).toUpperCase() || '??'
+  const text = (firstName.charAt(0) + lastName.charAt(0)).toUpperCase() || '??'
   const [c1, c2] = gradient ?? paletteGrad(firstName + lastName)
 
   return (

@@ -15,8 +15,8 @@ export const createManagerSchema = baseSchema.extend({
 })
 
 export const editManagerSchema = baseSchema.extend({
-  password: z.string().min(6, 'Минимум 6 символов').or(z.literal('')).optional(),
+  password: z.union([z.string().min(6, 'Минимум 6 символов'), z.literal('')]),
 })
 
-export type managerFormValues = z.infer<typeof createManagerSchema>
-export type editManagerFormValues = z.infer<typeof editManagerSchema>
+export type CreateManagerFormValues = z.infer<typeof createManagerSchema>
+export type EditManagerFormValues = z.infer<typeof editManagerSchema>

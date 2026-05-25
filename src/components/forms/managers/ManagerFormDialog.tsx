@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Eye, EyeOff, Loader2, X } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { useGetBranchesQuery } from '@/api/admin/branches/branchesApi'
@@ -26,12 +26,12 @@ import {
 import { getApiErrorMessage } from '@/lib'
 import {
   createManagerSchema,
-  type editManagerFormValues,
+  type EditManagerFormValues,
   editManagerSchema,
   type Manager,
 } from '@/types/entities/managers'
 
-type FormValues = editManagerFormValues
+type FormValues = EditManagerFormValues
 
 const LABEL_CLS = 'text-[12px] font-semibold tracking-tight text-stone-600 dark:text-white/65'
 const INPUT_CLS =
@@ -47,7 +47,7 @@ type Props = {
 export const ManagerFormDialog = ({ onClose, manager }: Props) => {
   const isEdit = !!manager
   const [showPassword, setShowPassword] = useState(false)
-  const { data: branchesData } = useGetBranchesQuery()
+  const { data: branchesData, isError: isBranchesError } = useGetBranchesQuery()
   const [createManager, { isLoading: isCreating }] = useCreateManagerMutation()
   const [updateManager, { isLoading: isUpdating }] = useUpdateManagerMutation()
 
@@ -63,29 +63,44 @@ export const ManagerFormDialog = ({ onClose, manager }: Props) => {
     },
   })
 
+  useEffect(() => {
+    form.reset({
+      login: manager?.login ?? '',
+      password: '',
+      firstName: manager?.firstName ?? '',
+      lastName: manager?.lastName ?? '',
+      phone: manager?.phone ?? '+996',
+      branchId: manager?.branch?.id ?? '',
+    })
+  }, [manager?.id])
+
   const onSubmit = async (values: FormValues) => {
+    const payload = { ...values, phone: values.phone.replace(/^\+/, '') }
     try {
       if (isEdit) {
-        const { password, ...rest } = values
+        const { password, ...rest } = payload
         await updateManager({
           id: manager.id,
           data: password ? { ...rest, password } : rest,
         }).unwrap()
         toast.success('Менеджер обновлён')
       } else {
-        await createManager(values as Required<FormValues>).unwrap()
+        const { password, ...rest } = payload
+        if (!password) return
+        await createManager({ ...rest, password }).unwrap()
         toast.success('Менеджер создан')
       }
       onClose()
     } catch (err) {
-      toast.error(getApiErrorMessage(err))
+      if (err instanceof TypeError || err instanceof RangeError) throw err
+      toast.error(getApiErrorMessage(err) || 'Произошла непредвиденная ошибка')
     }
   }
 
   const isLoading = isCreating || isUpdating
 
   return (
-    <Dialog open onOpenChange={(v) => !v && onClose()}>
+    <Dialog open onOpenChange={(v) => !v && !isLoading && onClose()}>
       <DialogContent
         className="sm:max-w-120 rounded-2xl p-0 gap-0
                    bg-white dark:bg-ink-900
@@ -93,7 +108,7 @@ export const ManagerFormDialog = ({ onClose, manager }: Props) => {
         showCloseButton={false}
       >
         {isLoading && (
-          <div className="absolute inset-0 rounded-2xl z-10 bg-white/70 dark:bg-ink-900/70 backdrop-blur-[2px] flex items-center justify-center">
+          <div className="absolute inset-0 rounded-2xl z-20 bg-white/70 dark:bg-ink-900/70 backdrop-blur-[2px] flex items-center justify-center">
             <Loader2 className="size-6 animate-spin text-forest-700 dark:text-forest-400" />
           </div>
         )}
@@ -219,7 +234,7 @@ export const ManagerFormDialog = ({ onClose, manager }: Props) => {
                         placeholder="+996700000000"
                         {...field}
                         onChange={(e) => {
-                          const digits = e.target.value.replace(/^\+996/, '').replace(/\D/g, '')
+                          const digits = e.target.value.replace(/\D/g, '').replace(/^996/, '')
                           field.onChange('+996' + digits.slice(0, 9))
                         }}
                       />
@@ -235,6 +250,11 @@ export const ManagerFormDialog = ({ onClose, manager }: Props) => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className={LABEL_CLS}>Филиал</FormLabel>
+                    {isBranchesError && (
+                      <p className="text-xs text-red-500 dark:text-red-400">
+                        Не удалось загрузить список филиалов
+                      </p>
+                    )}
                     <FormControl>
                       <Dropdown
                         className={INPUT_CLS}
