@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Eye, EyeOff, Loader2 } from 'lucide-react'
+import { Eye, EyeOff, Loader2, X } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -11,10 +11,10 @@ import {
 import {
   Button,
   Dialog,
+  DialogClose,
   DialogContent,
-  DialogFooter,
-  DialogHeader,
   DialogTitle,
+  Dropdown,
   Form,
   FormControl,
   FormField,
@@ -22,16 +22,22 @@ import {
   FormLabel,
   FormMessage,
   Input,
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
 } from '@/components/ui'
 import { getApiErrorMessage } from '@/lib'
-import { type Manager, managerFormSchema, type managerFormValues } from '@/types/entities/managers'
+import {
+  createManagerSchema,
+  type editManagerFormValues,
+  editManagerSchema,
+  type Manager,
+} from '@/types/entities/managers'
 
-type FormValues = managerFormValues
+type FormValues = editManagerFormValues
+
+const LABEL_CLS = 'text-[12px] font-semibold tracking-tight text-stone-600 dark:text-white/65'
+const INPUT_CLS =
+  'h-[46px] rounded-xl px-3.5 text-[14px] font-medium dark:bg-ink-800 ' +
+  'focus-visible:border-forest-700 dark:focus-visible:border-forest-400 ' +
+  'focus-visible:ring-4 focus-visible:ring-forest-700/8 dark:focus-visible:ring-forest-400/10'
 
 type Props = {
   onClose: () => void
@@ -46,161 +52,235 @@ export const ManagerFormDialog = ({ onClose, manager }: Props) => {
   const [updateManager, { isLoading: isUpdating }] = useUpdateManagerMutation()
 
   const form = useForm<FormValues>({
-    resolver: zodResolver(managerFormSchema),
+    resolver: zodResolver(isEdit ? editManagerSchema : createManagerSchema),
     defaultValues: {
       login: manager?.login ?? '',
-      password: manager?.password ?? '',
+      password: '',
       firstName: manager?.firstName ?? '',
       lastName: manager?.lastName ?? '',
-      phone: manager?.phone ?? '',
+      phone: manager?.phone ?? '+996',
       branchId: manager?.branch?.id ?? '',
     },
   })
 
-  const { dirtyFields } = form.formState
-
   const onSubmit = async (values: FormValues) => {
     try {
       if (isEdit) {
-        const changedValues = Object.fromEntries(
-          Object.keys(dirtyFields).map((key) => [key, values[key as keyof FormValues]]),
-        )
-        await updateManager({ id: manager.id, data: changedValues }).unwrap()
+        const { password, ...rest } = values
+        await updateManager({
+          id: manager.id,
+          data: password ? { ...rest, password } : rest,
+        }).unwrap()
         toast.success('Менеджер обновлён')
       } else {
-        await createManager(values).unwrap()
+        await createManager(values as Required<FormValues>).unwrap()
         toast.success('Менеджер создан')
       }
       onClose()
     } catch (err) {
       toast.error(getApiErrorMessage(err))
-      console.error('[ManagerFormDialog] mutation failed:', err)
     }
   }
 
+  const isLoading = isCreating || isUpdating
+
   return (
     <Dialog open onOpenChange={(v) => !v && onClose()}>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle>{isEdit ? 'Редактировать менеджера' : 'Добавить менеджера'}</DialogTitle>
-        </DialogHeader>
+      <DialogContent
+        className="sm:max-w-120 rounded-2xl p-0 gap-0
+                   bg-white dark:bg-ink-900
+                   border-stone-200/70 dark:border-white/8"
+        showCloseButton={false}
+      >
+        {isLoading && (
+          <div className="absolute inset-0 rounded-2xl z-10 bg-white/70 dark:bg-ink-900/70 backdrop-blur-[2px] flex items-center justify-center">
+            <Loader2 className="size-6 animate-spin text-forest-700 dark:text-forest-400" />
+          </div>
+        )}
+
+        <div className="flex items-center justify-between px-6 pt-5 pb-4 border-b border-stone-100 dark:border-white/6">
+          <DialogTitle className="text-[16px] font-bold tracking-tight text-stone-900 dark:text-white">
+            {isEdit ? 'Редактировать менеджера' : 'Создать менеджера'}
+          </DialogTitle>
+          <DialogClose asChild>
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon-sm"
+              className="text-stone-400 hover:text-stone-700 dark:text-white/40 dark:hover:text-white"
+            >
+              <X size={16} strokeWidth={2.5} />
+            </Button>
+          </DialogClose>
+        </div>
+
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4" autoComplete="off">
-            <div className="grid grid-cols-2 gap-4">
+          <form onSubmit={form.handleSubmit(onSubmit)} autoComplete="off">
+            <div className="px-6 py-5 flex flex-col gap-3.5 overflow-y-auto max-h-[calc(100dvh-10rem)]">
+              <div className="grid grid-cols-2 gap-3">
+                <FormField
+                  control={form.control}
+                  name="firstName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className={LABEL_CLS}>Имя</FormLabel>
+                      <FormControl>
+                        <Input className={INPUT_CLS} placeholder="Айгул" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="lastName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className={LABEL_CLS}>Фамилия</FormLabel>
+                      <FormControl>
+                        <Input className={INPUT_CLS} placeholder="Сатыбалдиева" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
               <FormField
                 control={form.control}
-                name="firstName"
+                name="login"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Имя</FormLabel>
+                    <FormLabel className={LABEL_CLS}>Логин</FormLabel>
                     <FormControl>
-                      <Input placeholder="Айгул" {...field} />
+                      <Input
+                        className={INPUT_CLS}
+                        placeholder="manager_bishkek"
+                        autoComplete="new-password"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
+
               <FormField
                 control={form.control}
-                name="lastName"
+                name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Фамилия</FormLabel>
+                    <FormLabel className={LABEL_CLS}>
+                      Пароль
+                      {isEdit && (
+                        <span className="ml-1.5 font-normal text-stone-400 dark:text-white/35">
+                          — оставьте пустым, чтобы не менять
+                        </span>
+                      )}
+                    </FormLabel>
                     <FormControl>
-                      <Input placeholder="Сатыбалдиева" {...field} />
+                      <div className="relative">
+                        <Input
+                          type={showPassword ? 'text' : 'password'}
+                          placeholder={isEdit ? 'Новый пароль' : '••••••'}
+                          autoComplete="new-password"
+                          className={`${INPUT_CLS} pr-11 font-mono`}
+                          {...field}
+                        />
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon-sm"
+                          onClick={() => setShowPassword((v) => !v)}
+                          className="absolute inset-y-0 right-1 my-auto text-stone-400 hover:text-stone-700 dark:text-white/35 dark:hover:text-white/70"
+                        >
+                          {showPassword ? (
+                            <EyeOff size={15} strokeWidth={1.8} />
+                          ) : (
+                            <Eye size={15} strokeWidth={1.8} />
+                          )}
+                        </Button>
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="phone"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className={LABEL_CLS}>Телефон</FormLabel>
+                    <FormControl>
+                      <Input
+                        className={`${INPUT_CLS} font-mono`}
+                        placeholder="+996700000000"
+                        {...field}
+                        onChange={(e) => {
+                          const digits = e.target.value.replace(/^\+996/, '').replace(/\D/g, '')
+                          field.onChange('+996' + digits.slice(0, 9))
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="branchId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className={LABEL_CLS}>Филиал</FormLabel>
+                    <FormControl>
+                      <Dropdown
+                        className={INPUT_CLS}
+                        placeholder="— Выберите филиал —"
+                        value={field.value}
+                        onChange={field.onChange}
+                        options={
+                          branchesData?.map((branch) => ({
+                            value: branch.id,
+                            label: (
+                              <>
+                                <span className="font-mono font-bold text-[11px] tracking-wider text-stone-500 dark:text-white/55">
+                                  {branch.personalCodePrefix}
+                                </span>
+                                <span className="text-[13px]">{branch.address}</span>
+                              </>
+                            ),
+                          })) ?? []
+                        }
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
             </div>
-            <FormField
-              control={form.control}
-              name="login"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Логин</FormLabel>
-                  <FormControl>
-                    <Input placeholder="aygul" autoComplete="new-password" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Пароль</FormLabel>
-                  <FormControl>
-                    <div className="relative">
-                      <Input
-                        type={showPassword ? 'text' : 'password'}
-                        placeholder="••••••••"
-                        autoComplete="new-password"
-                        className="pr-10"
-                        {...field}
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setShowPassword((v) => !v)}
-                        className="absolute inset-y-0 right-0 flex items-center px-3 text-muted-foreground hover:text-foreground"
-                      >
-                        {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-                      </button>
-                    </div>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="phone"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Телефон</FormLabel>
-                  <FormControl>
-                    <Input placeholder="+996700000000" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="branchId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Филиал</FormLabel>
-                  <Select onValueChange={field.onChange} value={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Выберите филиал" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {branchesData?.map((branch) => (
-                        <SelectItem key={branch.id} value={branch.id}>
-                          {branch.address} ({branch.personalCodePrefix})
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <DialogFooter>
-              <Button type="button" variant="outline" onClick={onClose}>
+
+            <div className="flex gap-2.5 px-6 pb-5 pt-2">
+              <Button
+                type="button"
+                variant="cancel"
+                className="flex-1 h-10 rounded-xl"
+                disabled={isLoading}
+                onClick={onClose}
+              >
                 Отмена
               </Button>
-              <Button type="submit" disabled={isCreating || isUpdating}>
-                {(isCreating || isUpdating) && <Loader2 className="size-4 animate-spin" />}
-                {isEdit ? 'Сохранить' : 'Добавить'}
+              <Button
+                type="submit"
+                variant="forest"
+                className="flex-1 h-10 rounded-xl"
+                disabled={isLoading}
+              >
+                {isLoading ? 'Сохранение...' : isEdit ? 'Сохранить' : 'Создать'}
               </Button>
-            </DialogFooter>
+            </div>
           </form>
         </Form>
       </DialogContent>

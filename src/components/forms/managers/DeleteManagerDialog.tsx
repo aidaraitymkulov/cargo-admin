@@ -10,7 +10,7 @@ import {
   DialogTitle,
 } from '@/components/ui'
 import { getApiErrorMessage } from '@/lib'
-import type { Manager } from '@/types'
+import type { Manager } from '@/types/entities/managers'
 
 type Props = {
   manager: Manager

@@ -1,2 +1,5 @@
-export * from './PaginationControl'
-export * from './ThemeToggle'
+export type { BadgeVariant } from './Badge'
+export { BADGE_VARIANT, Badge } from './Badge'
+export { InitialsAvatar } from './InitialsAvatar'
+export { PaginationControl } from './PaginationControl'
+export { ThemeToggle } from './ThemeToggle'

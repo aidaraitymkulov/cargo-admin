@@ -1,12 +1,22 @@
 import { z } from 'zod'
 
-export const managerFormSchema = z.object({
-  login: z.string().min(3, 'Логин должен содержать не менее 3 символов'),
-  password: z.string().min(6, 'Пароль должен содержать не менее 6 символов'),
+const phoneRegex = /^\+996\d{9}$/
+
+const baseSchema = z.object({
+  login: z.string().min(3, 'Минимум 3 символа'),
   firstName: z.string().min(1, 'Обязательное поле'),
   lastName: z.string().min(1, 'Обязательное поле'),
-  phone: z.string().min(1, 'Обязательное поле'),
+  phone: z.string().regex(phoneRegex, 'Формат: +996XXXXXXXXX (9 цифр)'),
   branchId: z.string().uuid('Выберите филиал'),
 })
 
-export type managerFormValues = z.infer<typeof managerFormSchema>
+export const createManagerSchema = baseSchema.extend({
+  password: z.string().min(6, 'Минимум 6 символов'),
+})
+
+export const editManagerSchema = baseSchema.extend({
+  password: z.string().min(6, 'Минимум 6 символов').or(z.literal('')).optional(),
+})
+
+export type managerFormValues = z.infer<typeof createManagerSchema>
+export type editManagerFormValues = z.infer<typeof editManagerSchema>

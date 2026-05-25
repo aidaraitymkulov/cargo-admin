@@ -7,3 +7,11 @@ export function getDateRange(range: Range): { from: string; to: string } {
   const fmt = (d: Date) => d.toISOString().slice(0, 10)
   return { from: fmt(from), to: fmt(to) }
 }
+
+export function fmtDate(iso: string) {
+  return new Date(iso).toLocaleDateString('ru-RU', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  })
+}
