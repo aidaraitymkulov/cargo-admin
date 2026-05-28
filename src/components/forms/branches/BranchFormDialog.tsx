@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Loader2 } from 'lucide-react'
+import { Hash, Loader2 } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { useCreateBranchMutation, useUpdateBranchMutation } from '@/api/admin/branches/branchesApi'
@@ -30,6 +30,7 @@ export const BranchFormDialog = ({ onClose, branch }: IProps) => {
   const isEdit = !!branch
   const [createBranch, { isLoading: isCreating }] = useCreateBranchMutation()
   const [updateBranch, { isLoading: isUpdating }] = useUpdateBranchMutation()
+  const isLoading = isCreating || isUpdating
 
   const form = useForm<BranchFormValues>({
     resolver: zodResolver(branchFormSchema),
@@ -39,15 +40,13 @@ export const BranchFormDialog = ({ onClose, branch }: IProps) => {
     },
   })
 
-  const { dirtyFields } = form.formState
+  const prefixValue = form.watch('personalCodePrefix')
+  const prefixError = form.formState.errors.personalCodePrefix
 
   const onSubmit = async (values: BranchFormValues) => {
     try {
       if (isEdit) {
-        const changedValues = Object.fromEntries(
-          Object.keys(dirtyFields).map((key) => [key, values[key as keyof BranchFormValues]]),
-        )
-        await updateBranch({ id: branch.id, data: changedValues }).unwrap()
+        await updateBranch({ id: branch.id, data: { address: values.address } }).unwrap()
         toast.success('Филиал обновлён')
       } else {
         await createBranch(values).unwrap()
@@ -56,59 +55,100 @@ export const BranchFormDialog = ({ onClose, branch }: IProps) => {
       onClose()
     } catch (err) {
       toast.error(getApiErrorMessage(err))
-      console.error('[BranchFormDialog] mutation failed:', err)
     }
   }
 
   return (
     <Dialog open onOpenChange={(v) => !v && onClose()}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-115">
         <DialogHeader>
           <DialogTitle>{isEdit ? 'Редактировать филиал' : 'Добавить филиал'}</DialogTitle>
         </DialogHeader>
+
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
             <FormField
               control={form.control}
               name="address"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Адрес</FormLabel>
+                  <FormLabel className="text-[12px] font-semibold tracking-tight text-stone-600 dark:text-white/65">
+                    Адрес <span className="text-red-500">*</span>
+                  </FormLabel>
                   <FormControl>
-                    <Input placeholder="г. Бишкек, ул. Манаса 40" {...field} />
+                    <Input
+                      placeholder="ул. Манаса 42, Бишкек"
+                      className="h-11.5 rounded-xl"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+
             {!isEdit && (
-              <FormField
-                control={form.control}
-                name="personalCodePrefix"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Префикс</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="AN"
-                        {...field}
-                        onChange={(e) =>
-                          field.onChange(e.target.value.replace(/[^a-zA-Z]/g, '').toUpperCase())
-                        }
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
+              <>
+                <FormField
+                  control={form.control}
+                  name="personalCodePrefix"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-[12px] font-semibold tracking-tight text-stone-600 dark:text-white/65">
+                        Префикс кода <span className="text-red-500">*</span>
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="MN"
+                          className="h-11.5 rounded-xl font-mono tracking-wider"
+                          {...field}
+                          onChange={(e) =>
+                            field.onChange(e.target.value.replace(/[^a-zA-Z]/g, '').toUpperCase())
+                          }
+                        />
+                      </FormControl>
+                      <p className="text-xs text-stone-400 dark:text-white/35">
+                        Уникальные латинские буквы. После создания не изменяется.
+                      </p>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {prefixValue && !prefixError && (
+                  <div className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-forest-50 dark:bg-forest-400/10 border border-forest-100 dark:border-forest-400/20">
+                    <Hash
+                      size={14}
+                      strokeWidth={2}
+                      className="shrink-0 text-forest-600 dark:text-forest-400"
+                    />
+                    <span className="text-[12.5px] text-forest-800 dark:text-forest-300">
+                      Клиентам будут присваиваться коды вида{' '}
+                      <span className="font-mono font-bold">{prefixValue}0001</span>,{' '}
+                      <span className="font-mono font-bold">{prefixValue}0002</span>…
+                    </span>
+                  </div>
                 )}
-              />
+              </>
             )}
-            <DialogFooter>
-              <Button type="button" variant="outline" onClick={onClose}>
+
+            <DialogFooter className="mt-1">
+              <Button
+                type="button"
+                disabled={isLoading}
+                className="flex-1 h-10 rounded-xl text-[13.5px] font-semibold bg-stone-100 hover:bg-stone-200 text-stone-700 dark:bg-white/6 dark:hover:bg-white/10 dark:text-white/80 shadow-none border-0"
+                onClick={onClose}
+              >
                 Отмена
               </Button>
-              <Button type="submit" disabled={isCreating || isUpdating}>
-                {(isCreating || isUpdating) && <Loader2 className="size-4 animate-spin" />}
-                {isEdit ? 'Сохранить' : 'Добавить'}
+              <Button
+                type="submit"
+                variant="forest"
+                disabled={isLoading}
+                className="flex-1 h-10 rounded-xl text-[13.5px]"
+              >
+                {isLoading && <Loader2 className="size-4 animate-spin" />}
+                {isEdit ? 'Сохранить' : 'Создать'}
               </Button>
             </DialogFooter>
           </form>
