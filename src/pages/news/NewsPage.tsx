@@ -1,7 +1,7 @@
 import { AlertCircle, Loader2, Newspaper, Plus } from 'lucide-react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useGetNewsQuery } from '@/api/admin/news/newsApi'
+import { useGetNewsQuery } from '@/api/admin/news'
 import { PageHeader } from '@/components/layout'
 import { Button, PaginationControl } from '@/components/ui'
 import { ROUTES } from '@/config'

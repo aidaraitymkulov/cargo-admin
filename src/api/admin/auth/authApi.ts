@@ -1,6 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
-import type { LoginDto } from '@/types/auth/auth'
+import type { LoginRequest } from '@/types/auth'
 import type { Manager } from '@/types/entities/managers'
+import { managerSchema } from '@/types/entities/managers'
 import { axiosBaseQuery } from '../../baseQuery'
 
 export const authApi = createApi({
@@ -9,14 +10,16 @@ export const authApi = createApi({
   endpoints: ({ mutation, query }) => ({
     getMe: query<Manager, void>({
       query: () => ({ url: '/admin/me' }),
+      transformResponse: (raw) => managerSchema.parse(raw),
     }),
-    login: mutation<Manager, LoginDto>({
+    login: mutation<Manager, LoginRequest>({
       query: (data) => ({
         url: '/auth/login',
         method: 'POST',
         data,
       }),
-      transformResponse: (response: { success: boolean; user: Manager }) => response.user,
+      transformResponse: (response: { success: boolean; user: unknown }) =>
+        managerSchema.parse(response.user),
     }),
     logout: mutation<void, void>({
       query: () => ({ url: '/auth/logout', method: 'POST' }),

@@ -28,7 +28,7 @@ export const NewsDeleteDialog = ({ id, title, onCancel }: IProps) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/45 backdrop-blur-sm">
-      <div className="w-full max-w-100 rounded-2xl p-6 shadow-modal bg-white dark:bg-white/3 border border-stone-200/70 dark:border-white/8">
+      <div className="w-full max-w-100 rounded-2xl p-6 shadow-modal bg-white dark:bg-[#0F1422] border border-stone-200/70 dark:border-white/8">
         <div className="w-11 h-11 rounded-xl flex items-center justify-center bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 mb-4">
           <Trash2 className="size-5" strokeWidth={1.8} />
         </div>
