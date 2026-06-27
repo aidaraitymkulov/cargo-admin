@@ -1,0 +1,10 @@
+services:
+  cargo-admin:
+    build:
+      context: .
+      args:
+        VITE_API_URL: ${VITE_API_URL}
+    container_name: cargo-admin
+    ports:
+      - "127.0.0.1:3001:80"
+    restart: unless-stopped
