@@ -10,5 +10,6 @@ export const protectedRoutes = [
   { path: ROUTES.MANAGERS, element: createElement(ManagersPage) },
   { path: ROUTES.BRANCHES, element: createElement(BranchesPage) },
   { path: ROUTES.NEWS.LIST, element: createElement(NewsPage) },
+  { path: ROUTES.NEWS.CREATE_PATTERN, element: createElement(NewsDetailPage) },
   { path: ROUTES.NEWS.DETAIL_PATTERN, element: createElement(NewsDetailPage) },
 ]

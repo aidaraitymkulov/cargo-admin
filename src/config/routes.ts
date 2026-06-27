@@ -5,7 +5,9 @@ export const ROUTES = {
   BRANCHES: '/branches',
   NEWS: {
     LIST: '/news',
-    DETAIL: (id: string | number) => `/news/${id}`,
+    CREATE: '/news/create',
+    DETAIL: (id: string) => `/news/${id}`,
     DETAIL_PATTERN: '/news/:id',
+    CREATE_PATTERN: '/news/create',
   },
 } as const
