@@ -1,7 +1,6 @@
 import { LogOut } from 'lucide-react'
 import { authSelectors } from '@/api/admin/auth'
-import { InitialsAvatar } from '@/components/shared/InitialsAvatar'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui'
+import { InitialsAvatar, Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui'
 import { useAppSelector } from '@/hooks'
 import { cn } from '@/lib/utils/cn'
 import { roleLabel } from '@/types/enums/role'

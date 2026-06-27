@@ -1,5 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
-import type { Branch, BranchFormValues } from '@/types/entities/branches'
+import { z } from 'zod'
+import { type Branch, type BranchFormValues, branchSchema } from '@/types/entities/branches'
 import { axiosBaseQuery } from '../../baseQuery'
 
 const BRANCH_TAG = 'Branch' as const
@@ -11,6 +12,7 @@ export const branchesApi = createApi({
   endpoints: ({ query, mutation }) => ({
     getBranches: query<Branch[], void>({
       query: () => ({ url: '/admin/branches' }),
+      transformResponse: (raw) => z.array(branchSchema).parse(raw),
       providesTags: [BRANCH_TAG],
     }),
     createBranch: mutation<Branch, BranchFormValues>({

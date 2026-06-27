@@ -1,8 +1,8 @@
 import { AlertCircle, Loader2, Pencil, Plus, Trash2, UserCog } from 'lucide-react'
-import { BADGE_VARIANT, Badge } from '@/components/shared/Badge'
-import { InitialsAvatar } from '@/components/shared/InitialsAvatar'
 import {
+  Badge,
   Button,
+  InitialsAvatar,
   Table,
   TableBody,
   TableCell,
@@ -148,7 +148,9 @@ export const ManagersTable = ({
               </TableCell>
 
               <TableCell>
-                <Badge variant={BADGE_VARIANT.GREEN}>{roleLabel[m.role]}</Badge>
+                <Badge className="bg-forest-50 text-forest-700 border-forest-100 dark:bg-forest-400/10 dark:text-forest-400 dark:border-forest-400/20">
+                  {roleLabel[m.role]}
+                </Badge>
               </TableCell>
 
               <TableCell className="text-[12px] text-stone-400 dark:text-white/32 font-medium">

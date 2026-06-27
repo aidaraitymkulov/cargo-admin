@@ -1,6 +1,0 @@
-export type { BadgeVariant } from './Badge'
-export { BADGE_VARIANT, Badge } from './Badge'
-export { ImageDropZone } from './ImageDropZone'
-export { InitialsAvatar } from './InitialsAvatar'
-export { PaginationControl } from './PaginationControl'
-export { ThemeToggle } from './ThemeToggle'

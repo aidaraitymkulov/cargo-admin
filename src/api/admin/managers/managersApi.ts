@@ -1,5 +1,10 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
-import type { CreateManagerFormValues, Manager } from '@/types/entities/managers'
+import { z } from 'zod'
+import {
+  type CreateManagerFormValues,
+  type Manager,
+  managerSchema,
+} from '@/types/entities/managers'
 import { axiosBaseQuery } from '../../baseQuery'
 
 const MANAGER_TAG = 'Manager' as const
@@ -11,6 +16,7 @@ export const managersApi = createApi({
   endpoints: ({ query, mutation }) => ({
     getManagers: query<Manager[], void>({
       query: () => ({ url: '/admin/managers' }),
+      transformResponse: (raw) => z.array(managerSchema).parse(raw),
       providesTags: [MANAGER_TAG],
     }),
     createManager: mutation<Manager, CreateManagerFormValues>({
