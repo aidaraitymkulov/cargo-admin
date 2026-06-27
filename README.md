@@ -12,7 +12,7 @@ npm run dev
 Создайте `.env.local`:
 
 ```env
-VITE_API_URL=https://api.adesexpress.com
+VITE_API_URL=https://api.example.com
 ```
 
 ## Стек
