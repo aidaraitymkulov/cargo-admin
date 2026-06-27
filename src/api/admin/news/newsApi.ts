@@ -1,6 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
-import type { News } from '@/types/entities/news'
-import type { PaginatedResponse } from '@/types/pagination'
+import { type News, newsSchema } from '@/types/entities/news'
+import { type PaginatedResponse, paginatedResponseSchema } from '@/types/pagination'
 import { axiosBaseQuery } from '../../baseQuery'
 
 const NEWS_TAG = 'News' as const
@@ -17,10 +17,12 @@ export const newsApi = createApi({
   endpoints: ({ query, mutation }) => ({
     getNews: query<PaginatedResponse<News>, GetNewsParams>({
       query: (params) => ({ url: '/admin/news', params }),
+      transformResponse: (raw) => paginatedResponseSchema(newsSchema).parse(raw),
       providesTags: [NEWS_TAG],
     }),
     getNewsById: query<News, string>({
       query: (id) => ({ url: `/admin/news/${id}` }),
+      transformResponse: (raw) => newsSchema.parse(raw),
       providesTags: [NEWS_TAG],
     }),
     createNews: mutation<News, FormData>({

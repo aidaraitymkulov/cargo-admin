@@ -1,3 +1,4 @@
 export type { CreateNewsDto, News, UpdateNewsDto } from './news'
-export type { newsFormValues } from './schema'
-export { newsFormSchema } from './schema'
+export { newsSchema } from './news'
+export type { NewsContentValues } from './schema'
+export { newsContentSchema } from './schema'

@@ -1,23 +1,27 @@
 import { Plus } from 'lucide-react'
 import { useState } from 'react'
 import { useGetBranchesQuery } from '@/api/admin/branches'
-import { BranchFormDialog } from '@/components/forms/branches'
 import { PageHeader } from '@/components/layout'
-import { BranchesTable } from '@/components/tables'
 import { Button } from '@/components/ui'
 import type { Branch } from '@/types/entities/branches'
+import { BranchesTable } from './BranchesTable'
+import { BranchFormDialog } from './BranchFormDialog'
+
+type FormMode = 'create' | 'edit'
 
 const BranchesPage = () => {
-  const [editBranch, setEditBranch] = useState<Branch | null>(null)
   const [formOpen, setFormOpen] = useState(false)
+  const [formMode, setFormMode] = useState<FormMode>('create')
+  const [editBranch, setEditBranch] = useState<Branch | null>(null)
 
   const { data, isLoading, isError } = useGetBranchesQuery()
 
   const openCreate = () => {
-    setEditBranch(null)
+    setFormMode('create')
     setFormOpen(true)
   }
   const openEdit = (b: Branch) => {
+    setFormMode('edit')
     setEditBranch(b)
     setFormOpen(true)
   }
@@ -53,7 +57,10 @@ const BranchesPage = () => {
         />
       </div>
 
-      {formOpen && <BranchFormDialog onClose={closeForm} branch={editBranch ?? undefined} />}
+      {formOpen && formMode === 'edit' && editBranch && (
+        <BranchFormDialog mode="edit" branch={editBranch} onClose={closeForm} />
+      )}
+      {formOpen && formMode === 'create' && <BranchFormDialog mode="create" onClose={closeForm} />}
     </div>
   )
 }

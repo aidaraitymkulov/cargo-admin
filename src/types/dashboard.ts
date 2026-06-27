@@ -1,23 +1,18 @@
-export interface DashboardSummary {
-  totalUsers: number
-  newUsersThisMonth: number
-  productsInChina: number
-  productsOnTheWay: number
-  productsAwaitingPickup: number
-  revenueThisWeek: number | null
-}
+import { z } from 'zod'
 
-export interface DashboardChartPoint {
-  date: string
-  count: number
-}
+export const dashboardSummarySchema = z.object({
+  totalUsers: z.number(),
+  newUsersThisMonth: z.number(),
+  productsInChina: z.number(),
+  productsOnTheWay: z.number(),
+  productsAwaitingPickup: z.number(),
+  revenueThisWeek: z.number().nullable(),
+})
 
-export interface DashboardSummaryParams {
-  branchId?: string
-}
+export const dashboardChartPointSchema = z.object({
+  date: z.string(),
+  count: z.number(),
+})
 
-export interface DashboardChartParams {
-  from: string
-  to: string
-  branchId?: string
-}
+export type DashboardSummary = z.infer<typeof dashboardSummarySchema>
+export type DashboardChartPoint = z.infer<typeof dashboardChartPointSchema>

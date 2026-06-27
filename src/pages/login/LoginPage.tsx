@@ -1,8 +1,8 @@
-import { LoginForm } from '@/components/forms/login'
-import { LoginBackground } from '@/components/layout/login'
-import { ThemeToggle } from '@/components/shared'
+import { ThemeToggle } from '@/components/ui'
+import { LoginBackground } from './LoginBackground'
+import { LoginForm } from './LoginForm'
 
-export const LoginPage = () => {
+const LoginPage = () => {
   return (
     <div
       className="relative flex h-screen items-center justify-center overflow-hidden p-6"
@@ -18,7 +18,7 @@ export const LoginPage = () => {
         ADES ADMIN · v 4.12.0
       </p>
 
-      <div className="relative z-10 w-full max-w-110 rounded-2xl bg-white p-10 shadow-[0_30px_80px_-20px_rgba(0,0,0,.55),0_0_0_1px_rgba(255,255,255,.06)] dark:bg-[#0F1422]">
+      <div className="relative z-10 w-full max-w-110 rounded-2xl bg-white p-10 shadow-[0_30px_80px_-20px_rgba(0,0,0,.55),0_0_0_1px_rgba(255,255,255,.06)] dark:bg-ink-900">
         <div className="mb-8 flex items-center gap-3">
           <img src="/logo.png" alt="ADES" className="h-9 dark:invert dark:brightness-0" />
           <div className="ml-1 border-l border-stone-200 pl-3 leading-tight dark:border-white/15">
@@ -45,3 +45,5 @@ export const LoginPage = () => {
     </div>
   )
 }
+
+export default LoginPage
