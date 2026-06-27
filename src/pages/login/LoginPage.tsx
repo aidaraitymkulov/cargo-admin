@@ -1,8 +1,8 @@
-import { LoginBackground } from '@/components/layout/login'
 import { ThemeToggle } from '@/components/ui'
+import { LoginBackground } from './LoginBackground'
 import { LoginForm } from './LoginForm'
 
-export const LoginPage = () => {
+const LoginPage = () => {
   return (
     <div
       className="relative flex h-screen items-center justify-center overflow-hidden p-6"
@@ -45,3 +45,5 @@ export const LoginPage = () => {
     </div>
   )
 }
+
+export default LoginPage

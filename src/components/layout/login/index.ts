@@ -1,1 +1,0 @@
-export { LoginBackground } from './LoginBackground'
