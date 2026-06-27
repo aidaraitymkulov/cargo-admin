@@ -8,21 +8,27 @@ import { DeleteManagerDialog } from './DeleteManagerDialog'
 import { ManagerFormDialog } from './ManagerFormDialog'
 import { ManagersTable } from './ManagersTable'
 
+type FormMode = 'create' | 'edit'
+
 const ManagersPage = () => {
   const [formOpen, setFormOpen] = useState(false)
+  const [formMode, setFormMode] = useState<FormMode>('create')
   const [editManager, setEditManager] = useState<Manager | null>(null)
   const [deleteManager, setDeleteManager] = useState<Manager | null>(null)
 
   const { data, isLoading, isError } = useGetManagersQuery()
 
   const openCreate = () => {
-    setEditManager(null)
+    setFormMode('create')
     setFormOpen(true)
   }
+
   const openEdit = (m: Manager) => {
+    setFormMode('edit')
     setEditManager(m)
     setFormOpen(true)
   }
+
   const closeForm = () => {
     setFormOpen(false)
     setEditManager(null)
@@ -38,14 +44,12 @@ const ManagersPage = () => {
           </Button>
         )}
       </PageHeader>
-
       <div className="max-w-300 mx-auto w-full px-7 py-7">
         <div className="mb-6">
           <h1 className="text-[24px] font-bold tracking-[-0.025em] text-stone-900 dark:text-white">
             Менеджеры
           </h1>
         </div>
-
         <ManagersTable
           managers={data ?? []}
           isLoading={isLoading}
@@ -55,8 +59,10 @@ const ManagersPage = () => {
           onDelete={setDeleteManager}
         />
       </div>
-
-      {formOpen && <ManagerFormDialog onClose={closeForm} manager={editManager ?? undefined} />}
+      {formOpen && formMode === 'edit' && editManager && (
+        <ManagerFormDialog mode="edit" manager={editManager} onClose={closeForm} />
+      )}
+      {formOpen && formMode === 'create' && <ManagerFormDialog mode="create" onClose={closeForm} />}
       {deleteManager && (
         <DeleteManagerDialog manager={deleteManager} onClose={() => setDeleteManager(null)} />
       )}

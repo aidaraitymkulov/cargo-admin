@@ -1,5 +1,5 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
-import type { News } from '@/types/entities/news'
+import { type News, newsSchema } from '@/types/entities/news'
 import type { PaginatedResponse } from '@/types/pagination'
 import { axiosBaseQuery } from '../../baseQuery'
 
@@ -21,6 +21,7 @@ export const newsApi = createApi({
     }),
     getNewsById: query<News, string>({
       query: (id) => ({ url: `/admin/news/${id}` }),
+      transformResponse: (raw) => newsSchema.parse(raw),
       providesTags: [NEWS_TAG],
     }),
     createNews: mutation<News, FormData>({

@@ -18,7 +18,7 @@ import {
   FormMessage,
   Input,
 } from '@/components/ui'
-import { getApiErrorMessage } from '@/lib'
+import { FORM_INPUT_CLS, FORM_LABEL_CLS, getApiErrorMessage } from '@/lib'
 import { type Branch, type BranchFormValues, branchFormSchema } from '@/types/entities/branches'
 
 type IProps = {
@@ -72,13 +72,13 @@ export const BranchFormDialog = ({ onClose, branch }: IProps) => {
               name="address"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-[12px] font-semibold tracking-tight text-stone-600 dark:text-white/65">
+                  <FormLabel className={FORM_LABEL_CLS}>
                     Адрес <span className="text-red-500">*</span>
                   </FormLabel>
                   <FormControl>
                     <Input
                       placeholder="ул. Манаса 42, Бишкек"
-                      className="h-11.5 rounded-xl"
+                      className={FORM_INPUT_CLS}
                       {...field}
                     />
                   </FormControl>
@@ -94,13 +94,13 @@ export const BranchFormDialog = ({ onClose, branch }: IProps) => {
                   name="personalCodePrefix"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-[12px] font-semibold tracking-tight text-stone-600 dark:text-white/65">
+                      <FormLabel className={FORM_LABEL_CLS}>
                         Префикс кода <span className="text-red-500">*</span>
                       </FormLabel>
                       <FormControl>
                         <Input
                           placeholder="MN"
-                          className="h-11.5 rounded-xl font-mono tracking-wider"
+                          className={`${FORM_INPUT_CLS} font-mono tracking-wider`}
                           {...field}
                           onChange={(e) =>
                             field.onChange(e.target.value.replace(/[^a-zA-Z]/g, '').toUpperCase())

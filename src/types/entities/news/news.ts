@@ -1,11 +1,15 @@
-export interface News {
-  id: string
-  image: string
-  title: string
-  content: string
-  createdAt: string
-  updatedAt: string
-}
+import { z } from 'zod'
+
+export const newsSchema = z.object({
+  id: z.string(),
+  image: z.string(),
+  title: z.string(),
+  content: z.string(),
+  createdAt: z.string(),
+  updatedAt: z.string(),
+})
+
+export type News = z.infer<typeof newsSchema>
 
 export type CreateNewsDto = {
   title: string

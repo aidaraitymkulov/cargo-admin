@@ -1,14 +1,16 @@
-import type { Role } from '@/types/enums/role.ts'
-import type { Branch } from '../branches/branches.ts'
+import { z } from 'zod'
+import { ROLE } from '@/types/enums/role'
+import { branchSchema } from '../branches/branches'
 
-export interface Manager {
-  id: string
-  login: string
-  password: string
-  firstName: string
-  lastName: string
-  phone: string
-  role: Role
-  branch: Branch | null
-  createdAt: string
-}
+export const managerSchema = z.object({
+  id: z.string(),
+  login: z.string(),
+  firstName: z.string(),
+  lastName: z.string(),
+  phone: z.string(),
+  role: z.nativeEnum(ROLE),
+  branch: branchSchema.nullable(),
+  createdAt: z.string(),
+})
+
+export type Manager = z.infer<typeof managerSchema>
