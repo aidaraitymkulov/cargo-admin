@@ -1,11 +1,12 @@
 import { Plus } from 'lucide-react'
 import { useState } from 'react'
 import { useGetManagersQuery } from '@/api/admin/managers'
-import { DeleteManagerDialog, ManagerFormDialog } from '@/components/forms/managers'
 import { PageHeader } from '@/components/layout'
-import { ManagersTable } from '@/components/tables'
 import { Button } from '@/components/ui'
 import type { Manager } from '@/types/entities/managers'
+import { DeleteManagerDialog } from './DeleteManagerDialog'
+import { ManagerFormDialog } from './ManagerFormDialog'
+import { ManagersTable } from './ManagersTable'
 
 const ManagersPage = () => {
   const [formOpen, setFormOpen] = useState(false)

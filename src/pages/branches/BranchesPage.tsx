@@ -1,11 +1,11 @@
 import { Plus } from 'lucide-react'
 import { useState } from 'react'
 import { useGetBranchesQuery } from '@/api/admin/branches'
-import { BranchFormDialog } from '@/components/forms/branches'
 import { PageHeader } from '@/components/layout'
-import { BranchesTable } from '@/components/tables'
 import { Button } from '@/components/ui'
 import type { Branch } from '@/types/entities/branches'
+import { BranchesTable } from './BranchesTable'
+import { BranchFormDialog } from './BranchFormDialog'
 
 const BranchesPage = () => {
   const [editBranch, setEditBranch] = useState<Branch | null>(null)

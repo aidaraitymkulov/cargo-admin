@@ -12,14 +12,13 @@ import {
   useUpdateNewsMutation,
 } from '@/api/admin/news/newsApi'
 import { PageHeader } from '@/components/layout'
-import { ImageDropZone } from '@/components/shared'
-import { NewsDeleteDialog } from '@/components/shared/news'
-import { Button } from '@/components/ui'
+import { Button, ImageDropZone } from '@/components/ui'
 import { ROUTES } from '@/config'
 import { useAppSelector } from '@/hooks'
 import { API_URL, getApiErrorMessage } from '@/lib'
 import { fmtDateTime } from '@/lib/utils'
 import { ROLE } from '@/types/enums/role'
+import { NewsDeleteDialog } from './NewsDeleteDialog'
 
 const formSchema = z.object({
   title: z.string().min(1, 'Обязательное поле'),

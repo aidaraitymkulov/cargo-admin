@@ -139,3 +139,7 @@ export {
 } from "./tooltip";
 export { Spinner } from './spinner'
 export { StatusBadge } from './StatusBadge'
+export { ImageDropZone } from './ImageDropZone'
+export { InitialsAvatar } from './InitialsAvatar'
+export { PaginationControl } from './PaginationControl'
+export { ThemeToggle } from './ThemeToggle'
