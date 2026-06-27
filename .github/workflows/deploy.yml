@@ -54,6 +54,6 @@ jobs:
             docker run -d \
               --name cargo-admin \
               --restart unless-stopped \
-              -p 80:80 \
+              -p 127.0.0.1:3001:80 \
               ${{ env.IMAGE }}:latest
             docker image prune -f
