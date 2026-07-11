@@ -18,10 +18,10 @@ interface IProps {
   isLoading: boolean
   isError: boolean
   onAdd: () => void
-  onEdit: (b: Branch) => void
+  onOpenOnMap: (b: Branch) => void
 }
 
-export const BranchesTable = ({ branches, isLoading, isError, onAdd, onEdit }: IProps) => (
+export const BranchesTable = ({ branches, isLoading, isError, onAdd, onOpenOnMap }: IProps) => (
   <div
     className="rounded-2xl overflow-hidden bg-white dark:bg-ink-900
                border border-stone-200/60 dark:border-white/6
@@ -102,9 +102,9 @@ export const BranchesTable = ({ branches, isLoading, isError, onAdd, onEdit }: I
                   <Button
                     variant="ghost"
                     size="icon-sm"
-                    title="Редактировать"
+                    title="Редактировать на карте"
                     className="rounded-lg text-stone-400 hover:text-stone-700 dark:text-white/40 dark:hover:text-white"
-                    onClick={() => onEdit(b)}
+                    onClick={() => onOpenOnMap(b)}
                   >
                     <Pencil size={14} strokeWidth={2} />
                   </Button>

@@ -1,6 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { z } from 'zod'
-import { type Branch, type BranchFormValues, branchSchema } from '@/types/entities/branches'
+import { type Branch, branchSchema } from '@/types/entities/branches'
 import { axiosBaseQuery } from '../../baseQuery'
 
 const BRANCH_TAG = 'Branch' as const
@@ -15,12 +15,22 @@ export const branchesApi = createApi({
       transformResponse: (raw) => z.array(branchSchema).parse(raw),
       providesTags: [BRANCH_TAG],
     }),
-    createBranch: mutation<Branch, BranchFormValues>({
-      query: (data) => ({ url: '/admin/branches', method: 'POST', data }),
+    createBranch: mutation<Branch, FormData>({
+      query: (data) => ({
+        url: '/admin/branches',
+        method: 'POST',
+        data,
+        headers: { 'Content-Type': 'multipart/form-data' },
+      }),
       invalidatesTags: [BRANCH_TAG],
     }),
-    updateBranch: mutation<Branch, { id: string; data: Partial<BranchFormValues> }>({
-      query: ({ id, data }) => ({ url: `/admin/branches/${id}`, method: 'PATCH', data }),
+    updateBranch: mutation<Branch, { id: string; data: FormData }>({
+      query: ({ id, data }) => ({
+        url: `/admin/branches/${id}`,
+        method: 'PATCH',
+        data,
+        headers: { 'Content-Type': 'multipart/form-data' },
+      }),
       invalidatesTags: [BRANCH_TAG],
     }),
   }),
