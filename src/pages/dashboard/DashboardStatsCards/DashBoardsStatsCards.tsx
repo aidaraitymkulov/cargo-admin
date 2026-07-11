@@ -1,6 +1,5 @@
 import { Clock, Globe, type LucideIcon, Truck, UsersRound, Wallet } from 'lucide-react'
-import { useSelector } from 'react-redux'
-import { authSelectors } from '@/api/admin/auth/authSelectors'
+import { useGetMeQuery } from '@/api/admin/auth'
 import { useGetDashboardSummaryQuery } from '@/api/admin/dashboard'
 import { cn } from '@/lib/utils'
 import type { DashboardSummary } from '@/types/dashboard'
@@ -65,7 +64,7 @@ const CARDS: CardConfig[] = [
 ]
 
 export const DashboardStatsCards = () => {
-  const user = useSelector(authSelectors.user)
+  const { data: user } = useGetMeQuery()
   const isSuperAdmin = user?.role === ROLE.SUPER_ADMIN
   const { data, isLoading } = useGetDashboardSummaryQuery({})
 
