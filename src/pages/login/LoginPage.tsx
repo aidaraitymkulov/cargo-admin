@@ -20,7 +20,7 @@ const LoginPage = () => {
 
       <div className="relative z-10 w-full max-w-110 rounded-2xl bg-white p-10 shadow-[0_30px_80px_-20px_rgba(0,0,0,.55),0_0_0_1px_rgba(255,255,255,.06)] dark:bg-ink-900">
         <div className="mb-8 flex items-center gap-3">
-          <img src={`${import.meta.env.BASE_URL}logo.png`} alt="ADES" className="h-9 dark:invert dark:brightness-0" />
+          <img src="/logo.png" alt="ADES" className="h-9 dark:invert dark:brightness-0" />
           <div className="ml-1 border-l border-stone-200 pl-3 leading-tight dark:border-white/15">
             <div className="font-mono text-[10px] font-semibold tracking-[.16em] text-forest-700 dark:text-forest-400">
               ADMIN · CONSOLE
