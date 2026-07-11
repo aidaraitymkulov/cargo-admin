@@ -1,6 +1,5 @@
 import { Suspense } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
-import { AuthGuard } from '@/components/layout/AuthGuard'
 import { Spinner } from '@/components/ui'
 import { Layout } from './components/layout'
 import { ROUTES } from './config'
@@ -18,12 +17,10 @@ function App() {
     >
       <Routes>
         <Route path={ROUTES.LOGIN} element={<LoginPage />} />
-        <Route element={<AuthGuard />}>
-          <Route element={<Layout />}>
-            {protectedRoutes.map(({ path, element }) => (
-              <Route key={path} path={path} element={element} />
-            ))}
-          </Route>
+        <Route element={<Layout />}>
+          {protectedRoutes.map(({ path, element }) => (
+            <Route key={path} path={path} element={element} />
+          ))}
         </Route>
         <Route path="*" element={<Navigate to={ROUTES.DASHBOARD} replace />} />
       </Routes>

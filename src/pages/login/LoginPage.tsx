@@ -1,8 +1,23 @@
-import { ThemeToggle } from '@/components/ui'
+import { Navigate } from 'react-router-dom'
+import { useGetMeQuery } from '@/api/admin/auth'
+import { Spinner, ThemeToggle } from '@/components/ui'
+import { ROUTES } from '@/config'
 import { LoginBackground } from './LoginBackground'
 import { LoginForm } from './LoginForm'
 
 const LoginPage = () => {
+  const { data, isLoading } = useGetMeQuery()
+
+  if (isLoading) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <Spinner size="lg" />
+      </div>
+    )
+  }
+
+  if (data) return <Navigate to={ROUTES.DASHBOARD} replace />
+
   return (
     <div
       className="relative flex h-screen items-center justify-center overflow-hidden p-6"
