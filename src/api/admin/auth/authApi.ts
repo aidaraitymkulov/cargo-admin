@@ -18,8 +18,7 @@ export const authApi = createApi({
         method: 'POST',
         data,
       }),
-      transformResponse: (response: { success: boolean; user: unknown }) =>
-        managerSchema.parse(response.user),
+      transformResponse: (raw) => managerSchema.parse(raw),
     }),
     logout: mutation<void, void>({
       query: () => ({ url: '/auth/logout', method: 'POST' }),
