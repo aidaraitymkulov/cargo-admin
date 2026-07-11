@@ -1,7 +1,6 @@
 import { LogOut } from 'lucide-react'
-import { authSelectors } from '@/api/admin/auth'
+import { useGetMeQuery } from '@/api/admin/auth'
 import { InitialsAvatar, Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui'
-import { useAppSelector } from '@/hooks'
 import { cn } from '@/lib/utils/cn'
 import { roleLabel } from '@/types/enums/role'
 
@@ -13,7 +12,7 @@ interface IProps {
 }
 
 export const SidebarUser = ({ collapsed, onLogout }: IProps) => {
-  const user = useAppSelector(authSelectors.user)
+  const { data: user } = useGetMeQuery()
 
   const fullName = user ? [user.firstName, user.lastName].filter(Boolean).join(' ') || '—' : '—'
   const roleLabelText = user ? (roleLabel[user.role] ?? user.role) : '—'

@@ -4,13 +4,17 @@ import type { Manager } from '@/types/entities/managers'
 import { managerSchema } from '@/types/entities/managers'
 import { axiosBaseQuery } from '../../baseQuery'
 
+const TAG = 'Me' as const
+
 export const authApi = createApi({
   reducerPath: 'authApi',
   baseQuery: axiosBaseQuery,
+  tagTypes: [TAG],
   endpoints: ({ mutation, query }) => ({
     getMe: query<Manager, void>({
       query: () => ({ url: '/admin/me' }),
       transformResponse: (raw) => managerSchema.parse(raw),
+      providesTags: [TAG],
     }),
     login: mutation<Manager, LoginRequest>({
       query: (data) => ({
@@ -18,11 +22,12 @@ export const authApi = createApi({
         method: 'POST',
         data,
       }),
-      transformResponse: (response: { success: boolean; user: unknown }) =>
-        managerSchema.parse(response.user),
+      transformResponse: (raw) => managerSchema.parse(raw),
+      invalidatesTags: [TAG],
     }),
     logout: mutation<void, void>({
       query: () => ({ url: '/auth/logout', method: 'POST' }),
+      invalidatesTags: [TAG],
     }),
   }),
 })

@@ -2,9 +2,9 @@ import { skipToken } from '@reduxjs/toolkit/query'
 import { Loader2 } from 'lucide-react'
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { useGetMeQuery } from '@/api/admin/auth'
 import { useGetNewsByIdQuery } from '@/api/admin/news/newsApi'
 import { ROUTES } from '@/config'
-import { useAppSelector } from '@/hooks'
 import { ROLE } from '@/types/enums/role'
 import { NewsDeleteDialog } from './NewsDeleteDialog'
 import { NewsFormView, NewsReadView } from './newsViews'
@@ -16,7 +16,7 @@ const NewsDetailPage = () => {
 
   const { data, isLoading } = useGetNewsByIdQuery(id ?? skipToken)
 
-  const user = useAppSelector((s) => s.auth.user)
+  const { data: user } = useGetMeQuery()
   const isSuperAdmin = user?.role === ROLE.SUPER_ADMIN
 
   const [editing, setEditing] = useState(false)

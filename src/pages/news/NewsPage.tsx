@@ -1,11 +1,11 @@
 import { AlertCircle, Loader2, Newspaper, Plus } from 'lucide-react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useGetMeQuery } from '@/api/admin/auth'
 import { useGetNewsQuery } from '@/api/admin/news'
 import { PageHeader } from '@/components/layout'
 import { Button, PaginationControl } from '@/components/ui'
 import { ROUTES } from '@/config'
-import { useAppSelector } from '@/hooks'
 import type { News } from '@/types/entities/news'
 import { ROLE } from '@/types/enums/role'
 import { NewsCard } from './NewsCard'
@@ -14,7 +14,7 @@ const NewsPage = () => {
   const navigate = useNavigate()
   const [page, setPage] = useState(1)
   const { data, isLoading, isError } = useGetNewsQuery({ page, pageSize: 20 })
-  const user = useAppSelector((state) => state.auth.user)
+  const { data: user } = useGetMeQuery()
   const isSuperAdmin = user?.role === ROLE.SUPER_ADMIN
 
   return (

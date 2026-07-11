@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
-import { setManager, useLoginMutation } from '@/api/admin/auth'
+import { useLoginMutation } from '@/api/admin/auth'
 import {
   Button,
   Form,
@@ -15,7 +15,6 @@ import {
   FormMessage,
   Input,
 } from '@/components/ui'
-import { useAppDispatch } from '@/hooks'
 import { FORM_INPUT_CLS, FORM_LABEL_CLS, getApiErrorMessage } from '@/lib'
 import { cn } from '@/lib/utils'
 import { type LoginRequest, loginRequestSchema } from '@/types/auth'
@@ -24,7 +23,6 @@ const iconCls =
   'absolute left-3.5 top-1/2 -translate-y-1/2 h-[18px] w-[18px] shrink-0 pointer-events-none text-stone-400 dark:text-white/40'
 
 export const LoginForm = () => {
-  const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const [showPassword, setShowPassword] = useState(false)
   const [loginUser, { isLoading, error }] = useLoginMutation()
@@ -41,8 +39,7 @@ export const LoginForm = () => {
 
   const onSubmit = async (data: LoginRequest) => {
     try {
-      const user = await loginUser(data).unwrap()
-      dispatch(setManager(user))
+      await loginUser(data).unwrap()
       navigate('/', { replace: true })
     } catch (err) {
       if (!err || typeof err !== 'object' || !('data' in err)) {
