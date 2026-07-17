@@ -1,19 +1,17 @@
 import { List, Map as MapIcon, Plus } from 'lucide-react'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useGetBranchesQuery } from '@/api/admin/branches'
 import { PageHeader } from '@/components/layout'
 import { Button } from '@/components/ui'
+import { ROUTES } from '@/config'
 import { cn } from '@/lib/utils'
 import type { Branch } from '@/types/entities/branches'
 import { BranchesTable } from './BranchesTable'
 import { BranchCreateForm } from './forms/BranchCreateForm'
-import { BranchMapView } from './map/BranchMapView'
-
-type ViewMode = 'list' | 'map'
 
 const BranchesPage = () => {
-  const [view, setView] = useState<ViewMode>('list')
-  const [focusId, setFocusId] = useState<string | null>(null)
+  const navigate = useNavigate()
   const [formOpen, setFormOpen] = useState(false)
 
   const { data, isLoading, isError } = useGetBranchesQuery()
@@ -21,22 +19,8 @@ const BranchesPage = () => {
   const openCreate = () => setFormOpen(true)
   const closeForm = () => setFormOpen(false)
 
-  const openOnMap = (b: Branch) => {
-    setFocusId(b.id)
-    setView('map')
-  }
-  const handleCreated = (b: Branch) => {
-    setFocusId(b.id)
-    setView('map')
-  }
-  const backToList = () => {
-    setView('list')
-    setFocusId(null)
-  }
-
-  if (view === 'map') {
-    return <BranchMapView branches={data ?? []} focusId={focusId} onBack={backToList} />
-  }
+  const openOnMap = (b: Branch) => navigate(ROUTES.BRANCHES.MAP_FOCUS(b.id))
+  const handleCreated = (b: Branch) => navigate(ROUTES.BRANCHES.MAP_FOCUS(b.id))
 
   return (
     <div className="flex flex-col">
@@ -50,7 +34,7 @@ const BranchesPage = () => {
           </button>
           <button
             type="button"
-            onClick={() => setView('map')}
+            onClick={() => navigate(ROUTES.BRANCHES.MAP)}
             className={cn(
               'h-8 px-3 rounded-md text-[12.5px] font-semibold flex items-center gap-1.5 transition-colors',
               'text-stone-500 hover:text-stone-800 dark:text-white/50 dark:hover:text-white',
