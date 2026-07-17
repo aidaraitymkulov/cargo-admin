@@ -149,6 +149,12 @@ input:-webkit-autofill:focus {
 }
 .animate-rise { animation: rise 0.15s ease-out; }
 
+/* Leaflet — outside @layer so it wins over layer rules. Tiles stay light in both themes. */
+.ades-map { font-family: 'Inter Variable', sans-serif; background: #E8EAE4; }
+.ades-map .leaflet-control-zoom a { border-radius: 8px !important; color: #2C2C2B !important; font-weight: 600; }
+.ades-map .leaflet-bar { border: none !important; box-shadow: 0 4px 14px -6px rgba(14,56,38,.4) !important; }
+.ades-map .leaflet-control-attribution { font-size: 10px !important; background: rgba(255,255,255,.7) !important; }
+
 @layer base {
   *,
   *::before,
