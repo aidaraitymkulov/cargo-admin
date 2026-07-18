@@ -2,12 +2,10 @@ import { skipToken } from '@reduxjs/toolkit/query'
 import { Loader2 } from 'lucide-react'
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { useGetMeQuery } from '@/api/admin/auth'
-import { useGetNewsByIdQuery } from '@/api/admin/news/newsApi'
-import { ROUTES } from '@/config'
-import { ROLE } from '@/types/enums/role'
-import { NewsDeleteDialog } from './NewsDeleteDialog'
-import { NewsFormView, NewsReadView } from './newsViews'
+import { useGetMeQuery } from '@/features/auth'
+import { NewsDeleteDialog, NewsFormView, NewsReadView, useGetNewsByIdQuery } from '@/features/news'
+import { ROUTES } from '@/shared/config'
+import { ROLE } from '@/shared/constants/enums'
 
 const NewsDetailPage = () => {
   const { id } = useParams<{ id?: string }>()
@@ -50,12 +48,14 @@ const NewsDetailPage = () => {
           }}
         />
       ) : (
-        <NewsReadView
-          data={data!}
-          isSuperAdmin={isSuperAdmin}
-          onEdit={() => setEditing(true)}
-          onDelete={() => setShowDelete(true)}
-        />
+        data && (
+          <NewsReadView
+            data={data}
+            isSuperAdmin={isSuperAdmin}
+            onEdit={() => setEditing(true)}
+            onDelete={() => setShowDelete(true)}
+          />
+        )
       )}
 
       {showDelete && data && (

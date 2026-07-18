@@ -1,14 +1,16 @@
 import { List, Map as MapIcon, Plus } from 'lucide-react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useGetBranchesQuery } from '@/api/admin/branches'
-import { PageHeader } from '@/components/layout'
-import { Button } from '@/components/ui'
-import { ROUTES } from '@/config'
-import { cn } from '@/lib/utils'
-import type { Branch } from '@/types/entities/branches'
-import { BranchesTable } from './BranchesTable'
-import { BranchCreateForm } from './forms/BranchCreateForm'
+import {
+  type Branch,
+  BranchCreateForm,
+  BranchesTable,
+  useGetBranchesQuery,
+} from '@/features/branches'
+import { PageHeader } from '@/layout'
+import { ROUTES } from '@/shared/config'
+import { cn } from '@/shared/lib/utils'
+import { Button } from '@/shared/ui'
 
 const BranchesPage = () => {
   const navigate = useNavigate()

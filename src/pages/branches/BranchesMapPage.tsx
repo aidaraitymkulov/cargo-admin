@@ -1,7 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom'
-import { useGetBranchesQuery } from '@/api/admin/branches'
-import { ROUTES } from '@/config'
-import { BranchMapView } from './map/BranchMapView'
+import { BranchMapView, useGetBranchesQuery } from '@/features/branches'
+import { ROUTES } from '@/shared/config'
 
 const BranchesMapPage = () => {
   const navigate = useNavigate()

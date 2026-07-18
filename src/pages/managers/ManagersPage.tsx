@@ -1,12 +1,14 @@
 import { Plus } from 'lucide-react'
 import { useState } from 'react'
-import { useGetManagersQuery } from '@/api/admin/managers'
-import { PageHeader } from '@/components/layout'
-import { Button } from '@/components/ui'
-import type { Manager } from '@/types/entities/managers'
-import { DeleteManagerDialog } from './DeleteManagerDialog'
-import { ManagerFormDialog } from './ManagerFormDialog'
-import { ManagersTable } from './ManagersTable'
+import {
+  DeleteManagerDialog,
+  type Manager,
+  ManagerFormDialog,
+  ManagersTable,
+  useGetManagersQuery,
+} from '@/features/managers'
+import { PageHeader } from '@/layout'
+import { Button } from '@/shared/ui'
 
 type FormMode = 'create' | 'edit'
 

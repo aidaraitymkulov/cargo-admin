@@ -1,10 +1,9 @@
 import { Suspense } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
-import { Spinner } from '@/components/ui'
-import { Layout } from './components/layout'
-import { ROUTES } from './config'
-import { LoginPage } from './pages/login'
-import { protectedRoutes } from './router'
+import { LoginPage } from '@/pages/auth'
+import { Spinner } from '@/shared/ui'
+import { Layout } from './layout'
+import { protectedRoutes, ROUTES } from './shared/config'
 
 function App() {
   return (
