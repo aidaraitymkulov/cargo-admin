@@ -2,7 +2,7 @@ import { BranchesMapPage, BranchesPage } from '@/pages/branches'
 import { DashboardPage } from '@/pages/dashboard'
 import { ManagersPage } from '@/pages/managers'
 import { NewsDetailPage, NewsPage } from '@/pages/news'
-import { ROUTES } from '@/shared/config'
+import { ROUTES } from './routes'
 
 export const protectedRoutes = [
   { path: ROUTES.DASHBOARD, element: <DashboardPage /> },
