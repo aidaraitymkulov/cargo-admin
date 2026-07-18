@@ -5,8 +5,8 @@ import { BrowserRouter } from 'react-router-dom'
 import { Toaster } from 'sonner'
 import '@fontsource-variable/inter'
 import './index.css'
+import { BASE_URL } from '@/shared/lib/env.ts'
 import { store } from '@/store'
-import { BASE_URL } from '@/lib/env'
 import App from './App.tsx'
 
 const root = document.getElementById('root')

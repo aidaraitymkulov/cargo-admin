@@ -1,6 +1,5 @@
-import { PageHeader } from '@/components/layout/PageHeader'
-import { DeliveredChartCard, UsersChartCard } from './DashboardCharts'
-import { DashboardStatsCards } from './DashboardStatsCards'
+import { DashboardStatsCards, DeliveredChartCard, UsersChartCard } from '@/features/dashboard'
+import { PageHeader } from '@/layout/PageHeader'
 
 const DashboardPage = () => {
   return (
