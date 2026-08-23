@@ -28,3 +28,14 @@ export function fmtDateTime(iso: string) {
     d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })
   )
 }
+
+function fmtAge(n: number): string {
+  if (n % 10 === 1 && n % 100 !== 11) return `${n} год`
+  if ([2, 3, 4].includes(n % 10) && ![12, 13, 14].includes(n % 100)) return `${n} года`
+  return `${n} лет`
+}
+
+export function fmtDob(iso: string) {
+  const age = Math.floor((Date.now() - new Date(iso).getTime()) / (365.25 * 86400000))
+  return `${fmtDate(iso)} · ${fmtAge(age)}`
+}
