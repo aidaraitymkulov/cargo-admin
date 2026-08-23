@@ -118,7 +118,9 @@ export const BranchLocationForm = ({
           </div>
         )}
         <div className="px-3.5 py-2.5 font-mono text-[11.5px] text-stone-500 dark:text-white/45 border-t border-stone-100 dark:border-white/5">
-          {latitude.toFixed(5)}, {longitude.toFixed(5)}
+          {Number.isFinite(latitude) && Number.isFinite(longitude)
+            ? `${latitude.toFixed(5)}, ${longitude.toFixed(5)}`
+            : '—'}
         </div>
       </div>
     </div>

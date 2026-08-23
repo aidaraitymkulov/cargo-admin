@@ -1,28 +1,12 @@
-import { List, Map as MapIcon, Plus } from 'lucide-react'
-import { useState } from 'react'
+import { List, Map as MapIcon } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
-import {
-  type Branch,
-  BranchCreateForm,
-  BranchesTable,
-  useGetBranchesQuery,
-} from '@/features/branches'
+import { BranchesTable } from '@/features/branches'
 import { PageHeader } from '@/layout'
 import { ROUTES } from '@/shared/config'
 import { cn } from '@/shared/lib/utils'
-import { Button } from '@/shared/ui'
 
 const BranchesPage = () => {
   const navigate = useNavigate()
-  const [formOpen, setFormOpen] = useState(false)
-
-  const { data, isLoading, isError } = useGetBranchesQuery()
-
-  const openCreate = () => setFormOpen(true)
-  const closeForm = () => setFormOpen(false)
-
-  const openOnMap = (b: Branch) => navigate(ROUTES.BRANCHES.MAP_FOCUS(b.id))
-  const handleCreated = (b: Branch) => navigate(ROUTES.BRANCHES.MAP_FOCUS(b.id))
 
   return (
     <div className="flex flex-col">
@@ -45,12 +29,6 @@ const BranchesPage = () => {
             <MapIcon size={14} strokeWidth={2} /> Карта
           </button>
         </div>
-        {data && data.length > 0 && (
-          <Button variant="forest" className="rounded-lg" onClick={openCreate}>
-            <Plus size={15} strokeWidth={2.5} />
-            Добавить филиал
-          </Button>
-        )}
       </PageHeader>
 
       <div className="max-w-300 mx-auto w-full px-7 py-7">
@@ -59,17 +37,8 @@ const BranchesPage = () => {
             Филиалы
           </h1>
         </div>
-
-        <BranchesTable
-          branches={data ?? []}
-          isLoading={isLoading}
-          isError={isError}
-          onAdd={openCreate}
-          onOpenOnMap={openOnMap}
-        />
+        <BranchesTable />
       </div>
-
-      {formOpen && <BranchCreateForm onClose={closeForm} onCreated={handleCreated} />}
     </div>
   )
 }

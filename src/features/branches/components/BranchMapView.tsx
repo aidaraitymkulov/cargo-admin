@@ -6,7 +6,7 @@ import { useForm, useWatch } from 'react-hook-form'
 import { MapContainer, Marker, TileLayer, useMap, useMapEvent, ZoomControl } from 'react-leaflet'
 import { toast } from 'sonner'
 import { getApiErrorMessage } from '@/shared/lib'
-import { ThemeToggle } from '@/shared/ui'
+import { Form, ThemeToggle } from '@/shared/ui'
 import { useUpdateBranchMutation } from '../api/branchesApi'
 import { DEFAULT_BRANCH_LAT, DEFAULT_BRANCH_LNG, DEFAULT_MAP_CENTER } from '../types/constants'
 import { type BranchLocationValues, branchLocationSchema } from '../types/schema'
@@ -29,6 +29,14 @@ const toDefaultValues = (branch: Branch): BranchLocationValues => ({
   longitude: branch.longitude ?? DEFAULT_BRANCH_LNG,
 })
 
+const EMPTY_LOCATION_VALUES: BranchLocationValues = {
+  address: '',
+  phone: '',
+  workingHours: '',
+  latitude: DEFAULT_BRANCH_LAT,
+  longitude: DEFAULT_BRANCH_LNG,
+}
+
 interface MapFocusProps {
   points: MarkerPoint[]
   focusId: string | null
@@ -36,23 +44,29 @@ interface MapFocusProps {
 
 const MapFocus = ({ points, focusId }: MapFocusProps) => {
   const map = useMap()
-  const didFit = useRef(false)
+  const focusedId = useRef<string | null>(null)
+  const didFitAll = useRef(false)
 
   useEffect(() => {
-    if (didFit.current || points.length === 0) {
-      if (points.length === 0) map.setView(DEFAULT_MAP_CENTER, 12)
+    if (points.length === 0) {
+      map.setView(DEFAULT_MAP_CENTER, 12)
       return
     }
-    didFit.current = true
-    const focused = focusId ? points.find((p) => p.id === focusId) : null
-    if (focused) {
-      map.setView([focused.lat, focused.lng], 15)
-    } else {
-      map.fitBounds(
-        points.map((p) => [p.lat, p.lng]),
-        { padding: [80, 80] },
-      )
+    if (focusId) {
+      if (focusedId.current === focusId) return
+      const focused = points.find((p) => p.id === focusId)
+      if (focused) {
+        focusedId.current = focusId
+        map.setView([focused.lat, focused.lng], 15)
+      }
+      return
     }
+    if (didFitAll.current) return
+    didFitAll.current = true
+    map.fitBounds(
+      points.map((p) => [p.lat, p.lng]),
+      { padding: [80, 80] },
+    )
   }, [map, points, focusId])
 
   return null
@@ -71,7 +85,7 @@ const MapFlyTo = ({ target }: MapFlyToProps) => {
       isFirst.current = false
       return
     }
-    if (target)
+    if (target && Number.isFinite(target.lat) && Number.isFinite(target.lng))
       map.flyTo([target.lat, target.lng], Math.max(map.getZoom(), 14), {
         duration: 0.6,
       })
@@ -113,10 +127,10 @@ export const BranchMapView = ({ branches, focusId, onBack }: Props) => {
 
   const form = useForm<BranchLocationValues>({
     resolver: zodResolver(branchLocationSchema),
-    defaultValues: selectedBranch ? toDefaultValues(selectedBranch) : undefined,
+    defaultValues: selectedBranch ? toDefaultValues(selectedBranch) : EMPTY_LOCATION_VALUES,
   })
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: reset must fire only when the selection changes, not on every branches refetch
+  // biome-ignore lint/correctness/useExhaustiveDependencies: reset must fire only when the selection changes or the branch first becomes available, not on every branches refetch
   useEffect(() => {
     if (selectedBranch) {
       form.reset(toDefaultValues(selectedBranch))
@@ -124,7 +138,7 @@ export const BranchMapView = ({ branches, focusId, onBack }: Props) => {
       setPhotoFile(null)
       setResetCounter((c) => c + 1)
     }
-  }, [selectedId])
+  }, [selectedId, !!selectedBranch])
 
   const watchedLat = useWatch({ control: form.control, name: 'latitude' })
   const watchedLng = useWatch({ control: form.control, name: 'longitude' })
@@ -201,7 +215,9 @@ export const BranchMapView = ({ branches, focusId, onBack }: Props) => {
 
         {points.map((p) => {
           const isSelected = p.id === selectedId
-          const position: [number, number] = isSelected ? [watchedLat, watchedLng] : [p.lat, p.lng]
+          const hasWatched = Number.isFinite(watchedLat) && Number.isFinite(watchedLng)
+          const position: [number, number] =
+            isSelected && hasWatched ? [watchedLat, watchedLng] : [p.lat, p.lng]
           const branch = branches.find((b) => b.id === p.id)
           return (
             <Marker
@@ -240,21 +256,23 @@ export const BranchMapView = ({ branches, focusId, onBack }: Props) => {
         <ThemeToggle />
       </div>
 
-      <BranchMapSidebar
-        branches={branches}
-        selectedBranch={selectedBranch}
-        onSelect={handleSelect}
-        onBackToList={() => setSelectedId(null)}
-        control={form.control}
-        editLoc={editLoc}
-        onToggleEditLoc={() => setEditLoc((v) => !v)}
-        onPhotoChange={setPhotoFile}
-        resetKey={`${selectedId ?? 'none'}:${resetCounter}`}
-        isDirty={isDirty}
-        isSaving={isSaving}
-        onSave={handleSave}
-        onReset={handleReset}
-      />
+      <Form {...form}>
+        <BranchMapSidebar
+          branches={branches}
+          selectedBranch={selectedBranch}
+          onSelect={handleSelect}
+          onBackToList={() => setSelectedId(null)}
+          control={form.control}
+          editLoc={editLoc}
+          onToggleEditLoc={() => setEditLoc((v) => !v)}
+          onPhotoChange={setPhotoFile}
+          resetKey={`${selectedId ?? 'none'}:${resetCounter}`}
+          isDirty={isDirty}
+          isSaving={isSaving}
+          onSave={handleSave}
+          onReset={handleReset}
+        />
+      </Form>
     </div>
   )
 }
