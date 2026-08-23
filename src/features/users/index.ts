@@ -1,1 +1,5 @@
-export { useGetUserStatsQuery, usersApi } from './api/usersApi'
+export { useGetUserStatsQuery, useGetUsersQuery, usersApi } from './api/usersApi'
+export { UsersTable } from './components/UsersTable'
+export { UsersTableFilter } from './components/UsersTableFilter'
+export { usersFiltersSlice } from './store/usersFiltersSlice'
+export { type User, userSchema } from './types/types'

@@ -1,8 +1,10 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import { adminApiMiddlewares, adminApiReducers } from './adminApi'
+import { sliceReducers } from './slices'
 
 const rootReducer = combineReducers({
   ...adminApiReducers,
+  ...sliceReducers,
 })
 
 export const store = configureStore({

@@ -15,4 +15,9 @@ export const ROUTES = {
     DETAIL_PATTERN: '/news/:id',
     CREATE_PATTERN: '/news/create',
   },
+  USERS: {
+    LIST: '/users',
+    DETAIL: (id: string) => `/users/${id}`,
+    DETAIL_PATTERN: '/users/:id',
+  },
 } as const
