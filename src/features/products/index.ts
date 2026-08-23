@@ -1,1 +1,5 @@
-export { productsApi, useGetProductStatsQuery } from './api/productsApi'
+export { productsApi, useGetProductStatsQuery, useGetUserProductsQuery } from './api/productsApi'
+export { UserProductsFilter } from './components/UserProductsFilter'
+export { UserProductsTable } from './components/UserProductsTable'
+export { userProductsFiltersSlice } from './store/userProductsFiltersSlice'
+export { type Product, productSchema } from './types/types'

@@ -2,7 +2,7 @@ import { BranchesMapPage, BranchesPage } from '@/pages/branches'
 import { DashboardPage } from '@/pages/dashboard'
 import { ManagersPage } from '@/pages/managers'
 import { NewsDetailPage, NewsPage } from '@/pages/news'
-import { UsersPage } from '@/pages/users'
+import { UserDetailPage, UsersPage } from '@/pages/users'
 import { ROUTES } from './routes'
 
 export const protectedRoutes = [
@@ -18,4 +18,5 @@ export const protectedRoutes = [
   { path: ROUTES.NEWS.CREATE_PATTERN, element: <NewsDetailPage /> },
   { path: ROUTES.NEWS.DETAIL_PATTERN, element: <NewsDetailPage /> },
   { path: ROUTES.USERS.LIST, element: <UsersPage /> },
+  { path: ROUTES.USERS.DETAIL_PATTERN, element: <UserDetailPage /> },
 ]
