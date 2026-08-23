@@ -1,14 +1,12 @@
 import { AlertCircle, Loader2, Newspaper, Plus } from 'lucide-react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useGetMeQuery } from '@/api/admin/auth'
-import { useGetNewsQuery } from '@/api/admin/news'
-import { PageHeader } from '@/components/layout'
-import { Button, PaginationControl } from '@/components/ui'
-import { ROUTES } from '@/config'
-import type { News } from '@/types/entities/news'
-import { ROLE } from '@/types/enums/role'
-import { NewsCard } from './NewsCard'
+import { useGetMeQuery } from '@/features/auth'
+import { type News, NewsCard, useGetNewsQuery } from '@/features/news'
+import { PageHeader } from '@/layout'
+import { ROUTES } from '@/shared/config'
+import { ROLE } from '@/shared/constants/enums'
+import { Button, PaginationControl } from '@/shared/ui'
 
 const NewsPage = () => {
   const navigate = useNavigate()

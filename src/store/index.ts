@@ -1,5 +1,5 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
-import { adminApiMiddlewares, adminApiReducers } from '@/api/admin/adminApi'
+import { adminApiMiddlewares, adminApiReducers } from './adminApi'
 
 const rootReducer = combineReducers({
   ...adminApiReducers,

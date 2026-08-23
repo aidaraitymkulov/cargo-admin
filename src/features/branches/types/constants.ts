@@ -1,0 +1,3 @@
+export const DEFAULT_BRANCH_LAT = 42.8746
+export const DEFAULT_BRANCH_LNG = 74.5698
+export const DEFAULT_MAP_CENTER: [number, number] = [DEFAULT_BRANCH_LAT, DEFAULT_BRANCH_LNG]
